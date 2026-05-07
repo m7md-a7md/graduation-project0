@@ -1,0 +1,207 @@
+"use client"
+
+import { useEffect, useState } from "react"
+import { useParams, useRouter } from "next/navigation"
+import { getAgent, deleteAgent, type Agent } from "@/lib/api"
+import UploadSection from "@/components/agents/UploadSection"
+import TrainingSection from "@/components/agents/TrainingSection"
+import ReadyDashboard from "@/components/agents/ReadyDashboard"
+import { Trash2, Loader2 } from "lucide-react"
+import { Headphones, BookOpen, BarChart2, Bot } from "lucide-react"
+import { cn } from "@/lib/utils"
+import { useTranslation } from "@/hooks/useTranslation"
+
+const statusConfig: Record<string, { label: string; ringColor: string; dotColor: string }> = {
+  idle: {
+    label: "Not trained",
+    ringColor: "border-white/10 text-white/35",
+    dotColor: "bg-white/25",
+  },
+  processing: {
+    label: "Training",
+    ringColor: "border-amber-500/30 text-amber-400/80",
+    dotColor: "bg-amber-400 animate-pulse",
+  },
+  ready: {
+    label: "Ready",
+    ringColor: "border-emerald-500/30 text-emerald-400/80",
+    dotColor: "bg-emerald-400",
+  },
+  failed: {
+    label: "Failed",
+    ringColor: "border-red-500/30 text-red-400/80",
+    dotColor: "bg-red-400",
+  },
+}
+
+const TYPE_ICONS: Record<string, React.ReactNode> = {
+  customer_support: <Headphones size={16} />,
+  knowledge_base: <BookOpen size={16} />,
+  analysis: <BarChart2 size={16} />,
+}
+
+function StatusBadge({ status }: { status: string }) {
+  const cfg = statusConfig[status] ?? statusConfig.idle
+  return (
+    <span
+      className={cn(
+        "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-[11px] font-medium whitespace-nowrap",
+        cfg.ringColor
+      )}
+    >
+      <span className={cn("h-1.5 w-1.5 rounded-full shrink-0", cfg.dotColor)} />
+      {cfg.label}
+    </span>
+  )
+}
+
+export default function AgentPage() {
+  const { agentId } = useParams()
+  const router = useRouter()
+
+  const [agent, setAgent] = useState<Agent | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [mounted, setMounted] = useState(false)
+  const [showConfirm, setShowConfirm] = useState(false)
+  const [deleting, setDeleting] = useState(false)
+  const { t } = useTranslation()
+
+  const fetchAgent = async () => {
+    const data = await getAgent(agentId as string)
+    setAgent(data)
+    setLoading(false)
+  }
+
+  useEffect(() => { setMounted(true) }, [])
+  useEffect(() => { if (mounted) fetchAgent() }, [mounted, agentId])
+  useEffect(() => {
+    if (agent?.ai_status !== "processing") return
+    const interval = setInterval(fetchAgent, 5000)
+    return () => clearInterval(interval)
+  }, [agent?.ai_status])
+
+  const handleDelete = async () => {
+    setDeleting(true)
+    try {
+      await deleteAgent(agentId as string)
+      router.push("/dashboard")
+    } catch {
+      setDeleting(false)
+      setShowConfirm(false)
+    }
+  }
+
+  if (!mounted || loading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-[#1a1a1a]">
+        <div className="h-4 w-4 animate-spin rounded-full border-2 border-white/10 border-t-white/50" />
+      </div>
+    )
+  }
+
+  if (!agent) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-[#1a1a1a] text-sm text-white/30">
+        Agent not found
+      </div>
+    )
+  }
+
+  return (
+    <div className="min-h-screen bg-[#1a1a1a] px-4 sm:px-6 md:px-10 py-6 sm:py-8">
+      <div className="mx-auto w-full max-w-4xl flex flex-col gap-6 sm:gap-8">
+
+        {/* ── Header ───────────────────────────────────────────── */}
+        <div className="flex items-start justify-between gap-3 flex-wrap">
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-white/8 bg-white/5 text-base">
+              {TYPE_ICONS[agent.agent_type] ?? <Bot size={16} />}
+            </div>
+            <div className="min-w-0">
+              <h1 className="text-sm font-semibold text-white/85 truncate">{agent.name}</h1>
+              <p className="mt-0.5 text-[11px] capitalize text-white/35 truncate">
+                {agent.agent_type.replace(/_/g, " ")}
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2 shrink-0">
+            <StatusBadge status={agent.ai_status} />
+            <button
+              onClick={() => setShowConfirm(true)}
+              className="rounded-lg p-1.5 text-white/20 transition-colors hover:bg-red-500/10 hover:text-red-400"
+            >
+              <Trash2 size={13} />
+            </button>
+          </div>
+        </div>
+
+        {/* divider */}
+        <div className="h-px w-full bg-white/6" />
+
+        {/* ── Content ──────────────────────────────────────────── */}
+        <div>
+          {agent.ai_status === "idle" && (
+            <UploadSection agent={agent} onUpdate={fetchAgent} />
+          )}
+          {agent.ai_status === "processing" && <TrainingSection />}
+          {agent.ai_status === "ready" && <ReadyDashboard agent={agent} />}
+          {agent.ai_status === "failed" && (
+            <div className="space-y-5">
+              <div className="rounded-xl border border-red-500/15 bg-red-500/5 px-4 py-3">
+                <p className="text-xs font-semibold text-red-400">{t("training", "failed")}</p>
+                <p className="mt-0.5 text-[11px] text-white/30">
+                  {t("training", "failedSubtitle")}
+                </p>
+              </div>
+              <UploadSection agent={agent} onUpdate={fetchAgent} />
+            </div>
+          )}
+        </div>
+
+      </div>
+
+      {/* ── Delete dialog ─────────────────────────────────────── */}
+      {showConfirm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            onClick={() => !deleting && setShowConfirm(false)}
+          />
+          <div className="relative z-10 w-full max-w-xs space-y-5 rounded-2xl border border-white/8 bg-[#222] p-6 shadow-2xl">
+            <div className="space-y-1.5">
+              <h2 className="text-sm font-semibold text-white/85">{t("delete", "title")}</h2>
+              <p className="text-[12px] leading-relaxed text-white/40">
+                {t("delete", "message")}{" "}
+                <span className="font-medium text-white/70">"{agent.name}"</span>.{t("delete", "cannot")}
+              </p>
+            </div>
+            <div className="flex justify-end gap-2">
+              <button
+                onClick={() => setShowConfirm(false)}
+                disabled={deleting}
+                className="rounded-lg border border-white/8 px-3 py-1.5 text-[12px] text-white/40 transition hover:border-white/15 hover:text-white/70 disabled:opacity-40"
+              >
+                {t("delete", "cancel")}
+              </button>
+              <button
+                onClick={handleDelete}
+                disabled={deleting}
+                className="flex items-center gap-1.5 rounded-lg bg-red-500/90 px-3 py-1.5 text-[12px] font-medium text-white transition hover:bg-red-500 disabled:opacity-50"
+              >
+                {deleting ? (
+                  <>
+                    <Loader2 size={11} className="animate-spin" />
+                    {t("delete", "title")}
+                  </>
+                ) : (
+                  t("delete", "title")
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
