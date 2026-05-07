@@ -1,20 +1,18 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { Suspense, useEffect, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import NewAgentModal from "@/components/agents/NewAgentModal"
 import { cn } from "@/lib/utils"
 import { Plus } from "lucide-react"
 import { useTranslation } from "@/hooks/useTranslation"
 
-
-export default function DashboardPage() {
+function DashboardContent() {
   const searchParams = useSearchParams()
   const router = useRouter()
   const [modalOpen, setModalOpen] = useState(false)
   const [mounted, setMounted] = useState(false)
   const { t } = useTranslation()
-
 
   useEffect(() => {
     setMounted(true)
@@ -48,7 +46,6 @@ export default function DashboardPage() {
 
           {/* Logo mark */}
           <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#2a2a2a] border border-white/8 shadow-xl">
-            {/* Simple Claude-style diamond glyph */}
             <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
               <path
                 d="M11 2L19.66 7V15L11 20L2.34 15V7L11 2Z"
@@ -109,5 +106,13 @@ export default function DashboardPage() {
       {/* Modal */}
       <NewAgentModal open={modalOpen} onClose={handleClose} />
     </div>
+  )
+}
+
+export default function DashboardPage() {
+  return (
+    <Suspense fallback={null}>
+      <DashboardContent />
+    </Suspense>
   )
 }
