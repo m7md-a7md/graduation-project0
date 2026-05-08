@@ -7,17 +7,13 @@ import { cn } from "@/lib/utils"
 import { Plus } from "lucide-react"
 import { useTranslation } from "@/hooks/useTranslation"
 
-
-export default function DashboardPage() {
+export default function DashboardContent() {
   const searchParams = useSearchParams()
   const router = useRouter()
   const [modalOpen, setModalOpen] = useState(false)
-  const [mounted, setMounted] = useState(false)
   const { t } = useTranslation()
 
-
   useEffect(() => {
-    setMounted(true)
     if (searchParams.get("newAgent") === "true") {
       setModalOpen(true)
     }
@@ -27,8 +23,6 @@ export default function DashboardPage() {
     setModalOpen(false)
     router.replace("/dashboard")
   }
-
-  if (!mounted) return null
 
   return (
     <div className="relative w-full h-screen overflow-hidden" style={{ background: "var(--black)" }}>
