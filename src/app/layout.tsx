@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import { Syne } from "next/font/google"
+import Script from "next/script"
 import "./globals.css"
 import { ThemeProvider } from "@/components/providers/ThemeProvider"
 
@@ -34,12 +35,33 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
       </head>
       <body className={syne.className} suppressHydrationWarning>
+        <Script
+          id="theme-init"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var stored = localStorage.getItem('agentlab-theme');
+                  if (!stored) {
+                    localStorage.setItem('agentlab-theme', 'dark');
+                    document.documentElement.classList.add('dark');
+                  } else {
+                    document.documentElement.classList.add(stored);
+                  }
+                } catch(e) {
+                  document.documentElement.classList.add('dark');
+                }
+              })();
+            `
+          }}
+        />
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
           enableSystem={false}
           disableTransitionOnChange
-          forcedTheme={undefined}
+          storageKey="agentlab-theme"
         >
           {children}
         </ThemeProvider>

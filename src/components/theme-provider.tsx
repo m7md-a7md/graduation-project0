@@ -15,7 +15,6 @@ function RTLandLanguageSync({ children }: { children: React.ReactNode }) {
   React.useEffect(() => {
     if (!mounted) return
 
-    // Set HTML attributes for RTL/LTR and language
     const htmlElement = document.documentElement
 
     if (isRTL) {
@@ -28,7 +27,6 @@ function RTLandLanguageSync({ children }: { children: React.ReactNode }) {
       htmlElement.classList.remove('ar')
     }
 
-    // Dispatch custom event for components that need to react to language changes
     window.dispatchEvent(
       new CustomEvent('languagechange', {
         detail: { locale, isRTL },

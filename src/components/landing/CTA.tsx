@@ -2,6 +2,8 @@
 
 import { useReveal } from "@/hooks/useReveal";
 import { useTranslation } from "@/hooks/useTranslation";
+import Link from "next/link"
+
 
 function ArrowIcon() {
   return (
@@ -34,9 +36,14 @@ function CTA() {
             {t("cta", "subtitle") || "Join hundreds of companies using AgentLab to automate customer support and deploy intelligent AI solutions."}
           </p>
           <div className="cta-actions">
-            <button className="btn-primary" style={{ fontSize: "18px", padding: "20px 48px" }}>
-              {t("cta", "primary") || "Create Your First Agent"} <ArrowIcon />
-            </button>
+<Link href="/auth?mode=register">
+  <button
+    className="btn-primary"
+    style={{ fontSize: "18px", padding: "20px 48px" }}
+  >
+    {t("cta", "primary") || "Create Your First Agent"} <ArrowIcon />
+  </button>
+</Link>
             <button className="btn-ghost" style={{ fontSize: "16px", padding: "20px 36px" }}>
               {t("cta", "secondary") || "View Docs"}
             </button>

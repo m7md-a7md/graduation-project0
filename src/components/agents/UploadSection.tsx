@@ -11,6 +11,25 @@ type Props = {
   onUpdate: () => void
 }
 
+const ALLOWED_EXTENSIONS = [".pdf", ".doc", ".docx", ".xls", ".xlsx", ".txt", ".png", ".jpg", ".jpeg", ".gif", ".webp"]
+const ALLOWED_MIME_TYPES = [
+  "application/pdf",
+  "application/msword",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  "application/vnd.ms-excel",
+  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  "text/plain",
+  "image/png",
+  "image/jpeg",
+  "image/gif",
+  "image/webp",
+]
+
+const isFileAllowed = (file: File): boolean => {
+  const ext = "." + file.name.split(".").pop()?.toLowerCase()
+  return ALLOWED_MIME_TYPES.includes(file.type) || ALLOWED_EXTENSIONS.includes(ext)
+}
+
 export default function UploadSection({ agent, onUpdate }: Props) {
   const inputRef = useRef<HTMLInputElement>(null)
   const [uploading, setUploading] = useState(false)
@@ -23,6 +42,7 @@ export default function UploadSection({ agent, onUpdate }: Props) {
   const files = agent.files || []
 
   const handleUpload = async (file: File) => {
+    if (!isFileAllowed(file)) return setError("نوع الملف غير مدعوم. الأنواع المسموح بها: PDF, Word, Excel, صور, نص.")
     if (file.size > 10 * 1024 * 1024) return setError("File size must be under 10MB")
     setUploading(true)
     setError("")
@@ -122,6 +142,10 @@ export default function UploadSection({ agent, onUpdate }: Props) {
             <p className="text-xs mt-1" style={{ color: "var(--text-3)" }}>
               {t("upload", "fileLimit")}
             </p>
+            {/* Allowed types hint */}
+            <p className="text-xs mt-1" style={{ color: "var(--text-3)" }}>
+              PDF · Word · Excel · Images · TXT
+            </p>
           </div>
         </div>
 
@@ -129,6 +153,7 @@ export default function UploadSection({ agent, onUpdate }: Props) {
           ref={inputRef}
           type="file"
           multiple
+          accept=".pdf,.doc,.docx,.xls,.xlsx,.txt,.png,.jpg,.jpeg,.gif,.webp"
           className="hidden"
           onChange={(e) => {
             const selectedFiles = Array.from(e.target.files || [])
