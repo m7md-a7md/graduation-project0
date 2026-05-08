@@ -55,19 +55,19 @@ export default function ReadyDashboard({ agent }: { agent: Agent }) {
           <div
             key={stat.label}
             style={{
-              background: "#141414",
-              border: "1px solid rgba(255,255,255,0.07)",
+              background: "var(--card)",
+              border: `1px solid var(--border)`,
               borderRadius: "16px",
               padding: "12px 14px",
             }}
           >
-            <div style={{ display: "flex", alignItems: "center", gap: "6px", color: "rgba(255,255,255,0.3)", marginBottom: "8px", flexWrap: "wrap" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "6px", color: "var(--text-3)", marginBottom: "8px", flexWrap: "wrap" }}>
               <span style={{ flexShrink: 0 }}>{stat.icon}</span>
               <span style={{ fontFamily: "var(--font-syne)", fontSize: "9px", fontWeight: 700, letterSpacing: "1.5px", textTransform: "uppercase", lineHeight: 1.3 }}>
                 {stat.label}
               </span>
             </div>
-            <p style={{ fontFamily: "var(--font-syne)", fontSize: "clamp(14px, 4vw, 22px)", fontWeight: 800, color: "rgba(255,255,255,0.92)", letterSpacing: "-0.5px", textTransform: "capitalize", wordBreak: "break-word" }}>
+            <p style={{ fontFamily: "var(--font-syne)", fontSize: "clamp(14px, 4vw, 22px)", fontWeight: 800, color: "var(--text-1)", letterSpacing: "-0.5px", textTransform: "capitalize", wordBreak: "break-word" }}>
               {stat.value}
             </p>
           </div>
@@ -81,8 +81,8 @@ export default function ReadyDashboard({ agent }: { agent: Agent }) {
         <div
           className="md:order-2"
           style={{
-            background: "#141414",
-            border: "1px solid rgba(255,255,255,0.07)",
+            background: "var(--card)",
+            border: `1px solid var(--border)`,
             borderRadius: "20px",
             overflow: "hidden",
             display: "flex",
@@ -92,11 +92,11 @@ export default function ReadyDashboard({ agent }: { agent: Agent }) {
           <div
             style={{
               padding: "16px 20px",
-              borderBottom: "1px solid rgba(255,255,255,0.06)",
+              borderBottom: `1px solid var(--border)`,
               flexShrink: 0,
             }}
           >
-            <p style={{ fontFamily: "var(--font-syne)", fontSize: "13px", fontWeight: 700, color: "rgba(255,255,255,0.92)" }}>
+            <p style={{ fontFamily: "var(--font-syne)", fontSize: "13px", fontWeight: 700, color: "var(--text-1)" }}>
               {t("ready", "test")}
             </p>
           </div>
@@ -112,8 +112,8 @@ export default function ReadyDashboard({ agent }: { agent: Agent }) {
         <div
           className="md:order-1"
           style={{
-            background: "#141414",
-            border: "1px solid rgba(255,255,255,0.07)",
+            background: "var(--card)",
+            border: `1px solid var(--border)`,
             borderRadius: "20px",
             overflow: "hidden",
             display: "flex",
@@ -123,14 +123,14 @@ export default function ReadyDashboard({ agent }: { agent: Agent }) {
           <div
             style={{
               padding: "16px 20px",
-              borderBottom: "1px solid rgba(255,255,255,0.06)",
+              borderBottom: `1px solid var(--border)`,
               flexShrink: 0,
             }}
           >
-            <p style={{ fontFamily: "var(--font-syne)", fontSize: "13px", fontWeight: 700, color: "rgba(255,255,255,0.92)" }}>
+            <p style={{ fontFamily: "var(--font-syne)", fontSize: "13px", fontWeight: 700, color: "var(--text-1)" }}>
               {t("ready", "widget")}
             </p>
-            <p style={{ fontFamily: "var(--font-dm-sans)", fontSize: "11px", color: "rgba(255,255,255,0.35)", marginTop: "2px" }}>
+            <p style={{ fontFamily: "var(--font-dm-sans)", fontSize: "11px", color: "var(--text-3)", marginTop: "2px" }}>
               {t("ready", "embedAgent")}
             </p>
           </div>

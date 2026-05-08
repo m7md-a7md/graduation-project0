@@ -44,12 +44,11 @@ export default function TestTab({ agentId, onMessageSent }: Props) {
       style={{
         display: "flex",
         flexDirection: "column",
-        /* على الموبايل: ارتفاع ثابت أقصر، على الشاشات الكبيرة أطول */
         height: "clamp(320px, 60vh, 520px)",
         borderRadius: "16px",
         overflow: "hidden",
-        border: "1px solid rgba(255,255,255,0.07)",
-        background: "#0e0e0e",
+        border: `1px solid var(--border)`,
+        background: "var(--surface)",
       }}
     >
       {/* Messages */}
@@ -86,7 +85,7 @@ export default function TestTab({ agentId, onMessageSent }: Props) {
             <p style={{
               fontFamily: "var(--font-dm-sans)",
               fontSize: "12px",
-              color: "rgba(255,255,255,0.4)",
+              color: "var(--text-3)",
               textAlign: "center",
               padding: "0 16px",
             }}>
@@ -123,11 +122,11 @@ export default function TestTab({ agentId, onMessageSent }: Props) {
               borderRadius: msg.role === "user"
                 ? isRTL ? "16px 16px 16px 4px" : "16px 16px 4px 16px"
                 : isRTL ? "16px 16px 4px 16px" : "16px 16px 16px 4px",
-              background: msg.role === "user" ? "#0147FF" : "rgba(255,255,255,0.05)",
-              border: msg.role === "user" ? "none" : "1px solid rgba(255,255,255,0.07)",
+              background: msg.role === "user" ? "#0147FF" : "var(--card)",
+              border: msg.role === "user" ? "none" : `1px solid var(--border)`,
               fontFamily: "var(--font-dm-sans)",
               fontSize: "13px",
-              color: msg.role === "user" ? "#fff" : "rgba(255,255,255,0.85)",
+              color: msg.role === "user" ? "#fff" : "var(--text-1)",
               lineHeight: 1.6,
               wordBreak: "break-word",
             }}>
@@ -151,8 +150,8 @@ export default function TestTab({ agentId, onMessageSent }: Props) {
             <div style={{
               padding: "10px 14px",
               borderRadius: "16px 16px 16px 4px",
-              background: "rgba(255,255,255,0.05)",
-              border: "1px solid rgba(255,255,255,0.07)",
+              background: "var(--card)",
+              border: `1px solid var(--border)`,
               display: "flex", gap: "5px", alignItems: "center",
             }}>
               {[0, 150, 300].map((delay) => (
@@ -175,7 +174,7 @@ export default function TestTab({ agentId, onMessageSent }: Props) {
       </div>
 
       {/* Divider */}
-      <div style={{ height: "1px", background: "rgba(255,255,255,0.05)", flexShrink: 0 }} />
+      <div style={{ height: "1px", background: "var(--border)", flexShrink: 0 }} />
 
       {/* Input */}
       <div style={{
@@ -184,7 +183,7 @@ export default function TestTab({ agentId, onMessageSent }: Props) {
         gap: "8px",
         alignItems: "center",
         flexShrink: 0,
-        background: "#0e0e0e",
+        background: "var(--surface)",
       }}>
         <input
           ref={inputRef}
@@ -200,19 +199,19 @@ export default function TestTab({ agentId, onMessageSent }: Props) {
           placeholder={t("test", "placeholder")}
           style={{
             flex: 1,
-            minWidth: 0, /* منع overflow */
-            background: "rgba(255,255,255,0.04)",
-            border: "1px solid rgba(255,255,255,0.08)",
+            minWidth: 0,
+            background: "var(--input-bg)",
+            border: `1px solid var(--border)`,
             borderRadius: "10px",
             padding: "9px 12px",
             fontFamily: "var(--font-dm-sans)",
             fontSize: "13px",
-            color: "rgba(255,255,255,0.9)",
+            color: "var(--text-1)",
             outline: "none",
             transition: "border-color 0.15s",
           }}
           onFocus={(e) => e.target.style.borderColor = "rgba(1,71,255,0.5)"}
-          onBlur={(e) => e.target.style.borderColor = "rgba(255,255,255,0.08)"}
+          onBlur={(e) => e.target.style.borderColor = "var(--border)"}
         />
         <button
           onClick={handleSend}
@@ -221,14 +220,14 @@ export default function TestTab({ agentId, onMessageSent }: Props) {
             width: "34px",
             height: "34px",
             flexShrink: 0,
-            background: input.trim() && !loading ? "#0147FF" : "rgba(255,255,255,0.04)",
-            border: `1px solid ${input.trim() && !loading ? "rgba(1,71,255,0.4)" : "rgba(255,255,255,0.07)"}`,
+            background: input.trim() && !loading ? "#0147FF" : "var(--input-bg)",
+            border: `1px solid ${input.trim() && !loading ? "rgba(1,71,255,0.4)" : "var(--border)"}`,
             borderRadius: "10px",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
             cursor: input.trim() && !loading ? "pointer" : "not-allowed",
-            color: input.trim() && !loading ? "#fff" : "rgba(255,255,255,0.2)",
+            color: input.trim() && !loading ? "#fff" : "var(--text-3)",
             transition: "all 0.15s",
             boxShadow: input.trim() && !loading ? "0 4px 12px rgba(1,71,255,0.25)" : "none",
           }}

@@ -1,18 +1,20 @@
 "use client"
 
-import { Suspense, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import NewAgentModal from "@/components/agents/NewAgentModal"
 import { cn } from "@/lib/utils"
 import { Plus } from "lucide-react"
 import { useTranslation } from "@/hooks/useTranslation"
 
-function DashboardContent() {
+
+export default function DashboardPage() {
   const searchParams = useSearchParams()
   const router = useRouter()
   const [modalOpen, setModalOpen] = useState(false)
   const [mounted, setMounted] = useState(false)
   const { t } = useTranslation()
+
 
   useEffect(() => {
     setMounted(true)
@@ -29,7 +31,7 @@ function DashboardContent() {
   if (!mounted) return null
 
   return (
-    <div className="relative w-full h-screen overflow-hidden bg-[#1a1a1a]">
+    <div className="relative w-full h-screen overflow-hidden" style={{ background: "var(--black)" }}>
 
       {/* Subtle radial glow — centre */}
       <div
@@ -45,30 +47,33 @@ function DashboardContent() {
         <div className="flex w-full max-w-sm flex-col items-center gap-10">
 
           {/* Logo mark */}
-          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#2a2a2a] border border-white/8 shadow-xl">
+          <div className="flex h-12 w-12 items-center justify-center rounded-2xl shadow-xl border" style={{ borderColor: "var(--border)", background: "var(--surface)" }}>
+            {/* Simple Claude-style diamond glyph */}
             <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
               <path
                 d="M11 2L19.66 7V15L11 20L2.34 15V7L11 2Z"
-                stroke="rgba(255,255,255,0.7)"
+                stroke="currentColor"
                 strokeWidth="1.5"
                 strokeLinejoin="round"
+                opacity="0.7"
               />
               <path
                 d="M11 7L15.33 9.5V14.5L11 17L6.67 14.5V9.5L11 7Z"
-                fill="rgba(255,255,255,0.12)"
-                stroke="rgba(255,255,255,0.4)"
+                fill="currentColor"
+                stroke="currentColor"
                 strokeWidth="1"
                 strokeLinejoin="round"
+                opacity="0.4"
               />
             </svg>
           </div>
 
           {/* Heading */}
           <div className="text-center space-y-3">
-            <h1 className="text-[28px] font-semibold tracking-tight text-white/90 leading-snug">
+            <h1 className="text-[28px] font-semibold tracking-tight leading-snug" style={{ color: "var(--text-1)" }}>
               {t("dashboard", "title")}
             </h1>
-            <p className="text-sm text-white/40 leading-relaxed">
+            <p className="text-sm leading-relaxed" style={{ color: "var(--text-3)" }}>
               {t("dashboard", "subtitle")}
             </p>
           </div>
@@ -79,13 +84,16 @@ function DashboardContent() {
             className={cn(
               "group flex w-full items-center justify-center gap-2",
               "rounded-xl px-5 py-3 text-sm font-medium",
-              "bg-white/8 border border-white/10 text-white/80",
-              "hover:bg-white/12 hover:border-white/20 hover:text-white",
-              "active:scale-[0.98]",
-              "transition-all duration-150"
+              "border transition-all duration-150",
+              "hover:opacity-80 active:scale-[0.98]"
             )}
+            style={{
+              background: "rgba(255, 255, 255, 0.08)",
+              borderColor: "var(--border)",
+              color: "var(--text-1)"
+            }}
           >
-            <Plus size={15} className="text-white/50 group-hover:text-white/80 transition-colors" />
+            <Plus size={15} style={{ color: "var(--text-3)", transition: "color 0.15s" }} className="group-hover:opacity-80" />
             {t("dashboard", "newAgent")}
           </button>
 
@@ -94,7 +102,12 @@ function DashboardContent() {
             {[{ label: t("agent", "knowledgeBase") }, { label: t("agent", "customerSupport") }, { label: t("agent", "analysis") }].map((f) => (
               <span
                 key={f.label}
-                className="rounded-full border border-white/8 bg-white/4 px-3 py-1 text-[11px] font-medium text-white/35"
+                className="rounded-full border px-3 py-1 text-[11px] font-medium"
+                style={{
+                  borderColor: "var(--border)",
+                  background: "rgba(255, 255, 255, 0.04)",
+                  color: "var(--text-3)"
+                }}
               >
                 {f.label}
               </span>
@@ -106,13 +119,5 @@ function DashboardContent() {
       {/* Modal */}
       <NewAgentModal open={modalOpen} onClose={handleClose} />
     </div>
-  )
-}
-
-export default function DashboardPage() {
-  return (
-    <Suspense fallback={null}>
-      <DashboardContent />
-    </Suspense>
   )
 }

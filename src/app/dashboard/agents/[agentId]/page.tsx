@@ -93,33 +93,33 @@ export default function AgentPage() {
 
   if (!mounted || loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#1a1a1a]">
-        <div className="h-4 w-4 animate-spin rounded-full border-2 border-white/10 border-t-white/50" />
+      <div className="flex min-h-screen items-center justify-center" style={{ background: "var(--black)" }}>
+        <div className="h-4 w-4 animate-spin rounded-full border-2 border-text-3 border-t-text-1" />
       </div>
     )
   }
 
   if (!agent) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#1a1a1a] text-sm text-white/30">
+      <div className="flex min-h-screen items-center justify-center text-sm" style={{ background: "var(--black)", color: "var(--text-3)" }}>
         Agent not found
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-[#1a1a1a] px-4 sm:px-6 md:px-10 py-6 sm:py-8">
+    <div className="min-h-screen px-4" style={{ background: "var(--black)" }}>
       <div className="mx-auto w-full max-w-4xl flex flex-col gap-6 sm:gap-8">
 
         {/* ── Header ───────────────────────────────────────────── */}
         <div className="flex items-start justify-between gap-3 flex-wrap">
           <div className="flex items-center gap-3 min-w-0">
-            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-white/8 bg-white/5 text-base">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border text-base" style={{ borderColor: "var(--border)", background: "var(--surface)", color: "var(--text-1)" }}>
               {TYPE_ICONS[agent.agent_type] ?? <Bot size={16} />}
             </div>
             <div className="min-w-0">
-              <h1 className="text-sm font-semibold text-white/85 truncate">{agent.name}</h1>
-              <p className="mt-0.5 text-[11px] capitalize text-white/35 truncate">
+              <h1 className="text-sm font-semibold truncate" style={{ color: "var(--text-1)" }}>{agent.name}</h1>
+              <p className="mt-0.5 text-[11px] capitalize truncate" style={{ color: "var(--text-3)" }}>
                 {agent.agent_type.replace(/_/g, " ")}
               </p>
             </div>
@@ -129,7 +129,8 @@ export default function AgentPage() {
             <StatusBadge status={agent.ai_status} />
             <button
               onClick={() => setShowConfirm(true)}
-              className="rounded-lg p-1.5 text-white/20 transition-colors hover:bg-red-500/10 hover:text-red-400"
+              className="rounded-lg p-1.5 transition-colors hover:bg-red-500/10 hover:text-red-400"
+              style={{ color: "var(--text-3)" }}
             >
               <Trash2 size={13} />
             </button>
@@ -137,7 +138,7 @@ export default function AgentPage() {
         </div>
 
         {/* divider */}
-        <div className="h-px w-full bg-white/6" />
+        <div className="h-px w-full" style={{ background: "var(--border)" }} />
 
         {/* ── Content ──────────────────────────────────────────── */}
         <div>
@@ -148,9 +149,9 @@ export default function AgentPage() {
           {agent.ai_status === "ready" && <ReadyDashboard agent={agent} />}
           {agent.ai_status === "failed" && (
             <div className="space-y-5">
-              <div className="rounded-xl border border-red-500/15 bg-red-500/5 px-4 py-3">
+              <div className="rounded-xl border border-red-500/15 px-4 py-3" style={{ background: "rgba(220, 38, 38, 0.05)" }}>
                 <p className="text-xs font-semibold text-red-400">{t("training", "failed")}</p>
-                <p className="mt-0.5 text-[11px] text-white/30">
+                <p className="mt-0.5 text-[11px]" style={{ color: "var(--text-3)" }}>
                   {t("training", "failedSubtitle")}
                 </p>
               </div>
@@ -168,26 +169,28 @@ export default function AgentPage() {
             className="absolute inset-0 bg-black/60 backdrop-blur-sm"
             onClick={() => !deleting && setShowConfirm(false)}
           />
-          <div className="relative z-10 w-full max-w-xs space-y-5 rounded-2xl border border-white/8 bg-[#222] p-6 shadow-2xl">
+          <div className="relative z-10 w-full max-w-xs space-y-5 rounded-2xl border p-6 shadow-2xl" style={{ borderColor: "var(--border)", background: "var(--card)" }}>
             <div className="space-y-1.5">
-              <h2 className="text-sm font-semibold text-white/85">{t("delete", "title")}</h2>
-              <p className="text-[12px] leading-relaxed text-white/40">
+              <h2 className="text-sm font-semibold" style={{ color: "var(--text-1)" }}>{t("delete", "title")}</h2>
+              <p className="text-[12px] leading-relaxed" style={{ color: "var(--text-3)" }}>
                 {t("delete", "message")}{" "}
-                <span className="font-medium text-white/70">"{agent.name}"</span>.{t("delete", "cannot")}
+                <span className="font-medium" style={{ color: "var(--text-2)" }}>"{agent.name}"</span>.{t("delete", "cannot")}
               </p>
             </div>
             <div className="flex justify-end gap-2">
               <button
                 onClick={() => setShowConfirm(false)}
                 disabled={deleting}
-                className="rounded-lg border border-white/8 px-3 py-1.5 text-[12px] text-white/40 transition hover:border-white/15 hover:text-white/70 disabled:opacity-40"
+                className="rounded-lg border px-3 py-1.5 text-[12px] transition hover:opacity-80 disabled:opacity-40"
+                style={{ borderColor: "var(--border)", color: "var(--text-3)" }}
               >
                 {t("delete", "cancel")}
               </button>
               <button
                 onClick={handleDelete}
                 disabled={deleting}
-                className="flex items-center gap-1.5 rounded-lg bg-red-500/90 px-3 py-1.5 text-[12px] font-medium text-white transition hover:bg-red-500 disabled:opacity-50"
+                className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-[12px] font-medium text-white transition hover:bg-red-600 disabled:opacity-50"
+                style={{ background: "rgb(220, 38, 38)" }}
               >
                 {deleting ? (
                   <>

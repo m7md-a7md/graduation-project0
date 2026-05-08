@@ -12,6 +12,7 @@ import {
 import { getAgents, type Agent } from "@/lib/api"
 import { cn } from "@/lib/utils"
 import { useTranslation } from "@/hooks/useTranslation"
+import Link from "next/link"
 
 const statusDot: Record<string, string> = {
   ready:      "bg-emerald-400",
@@ -99,14 +100,31 @@ function SidebarContent({
           </button>
         ) : (
           <>
-            <div className="flex items-center gap-2.5">
-              <div className="w-[30px] h-[30px] rounded-lg flex items-center justify-center shrink-0" style={{ background: "rgba(1,71,255,0.12)", border: "1px solid rgba(1,71,255,0.2)" }}>
-                <Bot size={14} style={{ color: "#0147FF" }} />
-              </div>
-              <span className="text-[15px] tracking-tight" style={{ fontFamily: "'Syne', sans-serif", fontWeight: 700, color: "var(--white)" }}>
-                AgentLab
-              </span>
-            </div>
+<Link
+  href="/"
+  className="flex items-center gap-2.5 group"
+>
+  <div
+    className="w-[30px] h-[30px] rounded-lg flex items-center justify-center shrink-0 transition-all duration-200 group-hover:scale-105"
+    style={{
+      background: "rgba(1,71,255,0.12)",
+      border: "1px solid rgba(1,71,255,0.2)",
+    }}
+  >
+    <Bot size={14} style={{ color: "#0147FF" }} />
+  </div>
+
+  <span
+    className="text-[15px] tracking-tight transition-opacity duration-200 group-hover:opacity-80"
+    style={{
+      fontFamily: "'Syne', sans-serif",
+      fontWeight: 700,
+      color: "var(--white)",
+    }}
+  >
+    AgentLab
+  </span>
+</Link>
             {isMobile ? (
               <button onClick={onClose} className="p-2 rounded-lg text-white/30 hover:text-white hover:bg-white/[0.06] transition-all">
                 <X size={15} />

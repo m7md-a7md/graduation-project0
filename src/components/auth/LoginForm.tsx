@@ -119,7 +119,7 @@ export default function LoginForm({ onSwitchToRegister, onSwitchToReset }: Props
           }
         </button>
         {onSwitchToRegister && (
-          <p style={{ textAlign: "center", fontFamily: "'Syne',sans-serif", fontSize: "13px", color: "rgba(255,255,255,0.38)" }}>
+          <p style={{ textAlign: "center", fontFamily: "'Syne',sans-serif", fontSize: "13px", color: "var(--text-3)" }}>
             {t("auth", "login.noAccount") || "Don't have an account?"}{" "}
             <button className="ag-link" onClick={onSwitchToRegister} disabled={isLoading}>
               {t("auth", "login.createOne") || "Create one"}

@@ -43,12 +43,12 @@ export default function ResetPasswordForm({ onBackToLogin }: Props) {
           <Send style={{ width: "32px", height: "32px", color: "#0147FF" }} />
         </div>
         <div>
-          <h2 style={{ fontFamily: "'Syne',sans-serif", fontWeight: 800, fontSize: "26px", color: "#fff", letterSpacing: "-0.5px", marginBottom: "10px" }}>
+          <h2 style={{ fontFamily: "'Syne',sans-serif", fontWeight: 800, fontSize: "26px", color: "var(--text-1)", letterSpacing: "-0.5px", marginBottom: "10px" }}>
             {t("auth", "reset.sent.title") || "Check your inbox"}
           </h2>
-          <p style={{ fontFamily: "'Syne',sans-serif", fontSize: "14px", color: "rgba(255,255,255,0.4)", lineHeight: 1.7, maxWidth: "280px" }}>
+          <p style={{ fontFamily: "'Syne',sans-serif", fontSize: "14px", color: "var(--text-3)", lineHeight: 1.7, maxWidth: "280px" }}>
             {t("auth", "reset.sent.subtitle") || "We sent a password reset link to"}{" "}
-            <span style={{ color: "#fff", fontWeight: 600 }}>{email}</span>
+            <span style={{ color: "var(--text-1)", fontWeight: 600 }}>{email}</span>
           </p>
         </div>
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "10px", marginTop: "8px" }}>

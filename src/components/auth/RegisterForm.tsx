@@ -75,19 +75,19 @@ export default function RegisterForm({ onSwitchToLogin }: Props) {
           <CheckCircle style={{ width: "34px", height: "34px", color: "#22c55e" }} />
         </div>
         <div>
-          <h2 style={{ fontFamily: "'Syne',sans-serif", fontWeight: 800, fontSize: "26px", color: "#fff", letterSpacing: "-0.5px", marginBottom: "10px" }}>
+          <h2 style={{ fontFamily: "'Syne',sans-serif", fontWeight: 800, fontSize: "26px", color: "var(--text-1)", letterSpacing: "-0.5px", marginBottom: "10px" }}>
             {t("auth", "register.verify.title") || "Verify your email"}
           </h2>
-          <p style={{ fontFamily: "'Syne',sans-serif", fontSize: "14px", color: "rgba(255,255,255,0.42)", lineHeight: 1.7, maxWidth: "280px" }}>
+          <p style={{ fontFamily: "'Syne',sans-serif", fontSize: "14px", color: "var(--text-3)", lineHeight: 1.7, maxWidth: "280px" }}>
             {t("auth", "register.verify.subtitle") || "We sent a verification link to"}{" "}
-            <span style={{ color: "#fff", fontWeight: 600 }}>{email}</span>
+            <span style={{ color: "var(--text-1)", fontWeight: 600 }}>{email}</span>
             {". " + (t("auth", "register.verify.checkInbox") || "Please check your inbox.")}
           </p>
         </div>
         <button onClick={onSwitchToLogin} className="ag-btn" style={{ marginTop: "8px" }}>
           {t("auth", "register.verify.goToSignIn") || "Go to Sign In"}
         </button>
-        <p style={{ fontFamily: "'Syne',sans-serif", fontSize: "12px", color: "rgba(255,255,255,0.3)" }}>
+        <p style={{ fontFamily: "'Syne',sans-serif", fontSize: "12px", color: "var(--text-3)" }}>
           {t("auth", "register.verify.didntReceive") || "Didn't receive it?"}{" "}
           <button
             onClick={async () => {
@@ -223,7 +223,7 @@ export default function RegisterForm({ onSwitchToLogin }: Props) {
           </div>
         )}
 
-        <p style={{ textAlign: "center", fontFamily: "'Syne',sans-serif", fontSize: "12px", color: "rgba(255,255,255,0.3)", lineHeight: 1.65 }}>
+        <p style={{ textAlign: "center", fontFamily: "'Syne',sans-serif", fontSize: "12px", color: "var(--text-3)", lineHeight: 1.65 }}>
           {t("auth", "register.terms.prefix") || "By signing up, you agree to our"}{" "}
           <a href="/terms" style={{ color: "#0147FF", textDecoration: "none", fontWeight: 600 }}>
             {t("auth", "register.terms.tos") || "Terms of Service"}
@@ -246,7 +246,7 @@ export default function RegisterForm({ onSwitchToLogin }: Props) {
           }
         </button>
         {onSwitchToLogin && (
-          <p style={{ textAlign: "center", fontFamily: "'Syne',sans-serif", fontSize: "13px", color: "rgba(255,255,255,0.38)" }}>
+          <p style={{ textAlign: "center", fontFamily: "'Syne',sans-serif", fontSize: "13px", color: "var(--text-3)" }}>
             {t("auth", "register.hasAccount") || "Already have an account?"}{" "}
             <button className="ag-link" onClick={onSwitchToLogin} disabled={isLoading}>
               {t("auth", "register.signIn") || "Sign in"}

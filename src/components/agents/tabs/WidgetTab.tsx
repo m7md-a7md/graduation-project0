@@ -59,14 +59,14 @@ export default function WidgetTab({ agentId }: { agentId: string }) {
           fontFamily: "var(--font-syne)",
           fontSize: "13px",
           fontWeight: 700,
-          color: "rgba(255,255,255,0.9)",
+          color: "var(--text-1)",
         }}>
           {t("widget", "noWidget")}
         </p>
         <p style={{
           fontFamily: "var(--font-dm-sans)",
           fontSize: "11px",
-          color: "rgba(255,255,255,0.35)",
+          color: "var(--text-3)",
           marginTop: "4px",
         }}>
           {t("widget", "noWidgetSubtitle")}
@@ -133,7 +133,7 @@ export default function WidgetTab({ agentId }: { agentId: string }) {
           fontFamily: "var(--font-syne)",
           fontSize: "11px",
           fontWeight: 700,
-          color: "rgba(255,255,255,0.4)",
+          color: "var(--text-3)",
           letterSpacing: "2px",
           textTransform: "uppercase",
         }}>
@@ -141,14 +141,14 @@ export default function WidgetTab({ agentId }: { agentId: string }) {
         </p>
         <div style={{ position: "relative" }}>
           <pre style={{
-            background: "#0e0e0e",
-            border: "1px solid rgba(255,255,255,0.07)",
+            background: "var(--surface)",
+            border: `1px solid var(--border)`,
             borderRadius: "10px",
             padding: "12px",
-            paddingRight: "40px", /* مساحة لزر النسخ */
+            paddingRight: "40px",
             fontFamily: "var(--font-dm-mono)",
             fontSize: "11px",
-            color: "rgba(255,255,255,0.6)",
+            color: "var(--text-2)",
             overflowX: "auto",
             whiteSpace: "pre-wrap",
             wordBreak: "break-all",
@@ -161,12 +161,12 @@ export default function WidgetTab({ agentId }: { agentId: string }) {
             onClick={() => handleCopy("code")}
             style={{
               position: "absolute", top: "8px", right: "8px",
-              background: "#1a1a1a",
-              border: "1px solid rgba(255,255,255,0.1)",
+              background: "var(--input-bg)",
+              border: `1px solid var(--border)`,
               borderRadius: "6px",
               padding: "4px 6px",
               cursor: "pointer",
-              color: copied === "code" ? "#22c55e" : "rgba(255,255,255,0.4)",
+              color: copied === "code" ? "#22c55e" : "var(--text-3)",
               flexShrink: 0,
             }}
           >
@@ -186,7 +186,7 @@ export default function WidgetTab({ agentId }: { agentId: string }) {
           fontFamily: "var(--font-syne)",
           fontSize: "11px",
           fontWeight: 700,
-          color: "rgba(255,255,255,0.4)",
+          color: "var(--text-3)",
           letterSpacing: "2px",
           textTransform: "uppercase",
         }}>
@@ -194,13 +194,13 @@ export default function WidgetTab({ agentId }: { agentId: string }) {
         </p>
         <div style={{ position: "relative" }}>
           <div style={{
-            background: "#0e0e0e",
-            border: "1px solid rgba(255,255,255,0.07)",
+            background: "var(--surface)",
+            border: `1px solid var(--border)`,
             borderRadius: "10px",
-            padding: "10px 40px 10px 12px", /* مساحة لزر النسخ */
+            padding: "10px 40px 10px 12px",
             fontFamily: "var(--font-dm-mono)",
             fontSize: "11px",
-            color: "rgba(255,255,255,0.6)",
+            color: "var(--text-2)",
             wordBreak: "break-all",
             overflowWrap: "break-word",
           }}>
@@ -210,12 +210,12 @@ export default function WidgetTab({ agentId }: { agentId: string }) {
             onClick={() => handleCopy("key")}
             style={{
               position: "absolute", top: "8px", right: "8px",
-              background: "#1a1a1a",
-              border: "1px solid rgba(255,255,255,0.1)",
+              background: "var(--input-bg)",
+              border: `1px solid var(--border)`,
               borderRadius: "6px",
               padding: "4px 6px",
               cursor: "pointer",
-              color: copied === "key" ? "#22c55e" : "rgba(255,255,255,0.4)",
+              color: copied === "key" ? "#22c55e" : "var(--text-3)",
             }}
           >
             {copied === "key" ? <Check size={11} /> : <Copy size={11} />}

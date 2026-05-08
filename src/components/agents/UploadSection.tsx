@@ -62,35 +62,36 @@ export default function UploadSection({ agent, onUpdate }: Props) {
     <div className="space-y-6">
       {/* Header */}
       <div className="space-y-2">
-        <h3 className="text-base font-semibold text-white tracking-tight">
+        <h3 className="text-base font-semibold tracking-tight" style={{ color: "var(--text-1)" }}>
           {t("upload", "title")}
         </h3>
-        <p className="text-sm text-white/50">
+        <p className="text-sm" style={{ color: "var(--text-3)" }}>
           {t("upload", "subtitle")}
         </p>
       </div>
 
       {/* Drop Zone */}
-      <div
-        onClick={() => !uploading && inputRef.current?.click()}
-        onDragOver={(e) => { e.preventDefault(); setDragOver(true) }}
-        onDragLeave={() => setDragOver(false)}
-        onDrop={(e) => {
-          e.preventDefault()
-          setDragOver(false)
-          const droppedFiles = Array.from(e.dataTransfer.files)
-          droppedFiles.forEach(handleUpload)
-        }}
-        className={cn(
-          "group relative rounded-2xl border-2 border-dashed transition-all duration-200",
-          "p-8 flex flex-col items-center justify-center cursor-pointer",
-          "hover:border-blue-500/50 hover:bg-blue-500/5",
-          dragOver 
-            ? "border-blue-500 bg-blue-500/10" 
-            : "border-white/10 bg-white/2",
-          uploading && "opacity-60 pointer-events-none"
-        )}
-      >
+<div
+  onClick={() => !uploading && inputRef.current?.click()}
+  onDragOver={(e) => { e.preventDefault(); setDragOver(true) }}
+  onDragLeave={() => setDragOver(false)}
+  onDrop={(e) => {
+    e.preventDefault()
+    setDragOver(false)
+    const droppedFiles = Array.from(e.dataTransfer.files)
+    droppedFiles.forEach(handleUpload)
+  }}
+  className={cn(
+    "group relative rounded-2xl border-2 border-dashed transition-all duration-200",
+    "p-8 flex flex-col items-center justify-center cursor-pointer",
+    "hover:border-blue-500/50 hover:bg-blue-500/5",
+    dragOver && "border-blue-500 bg-blue-500/10"
+  )}
+  style={{
+    borderColor: dragOver ? undefined : "var(--border)",
+    background: dragOver ? undefined : "var(--surface)"
+  }}
+>
         {/* Background Gradient */}
         <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-blue-500/0 via-transparent to-purple-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
         
@@ -101,8 +102,12 @@ export default function UploadSection({ agent, onUpdate }: Props) {
             "transition-all duration-200",
             dragOver 
               ? "bg-blue-500/20 text-blue-400" 
-              : "bg-white/8 text-white/40 group-hover:bg-blue-500/15 group-hover:text-blue-400"
-          )}>
+              : "group-hover:bg-blue-500/15 group-hover:text-blue-400"
+          )}
+          style={{
+            background: dragOver ? undefined : "var(--surface)",
+            color: dragOver ? undefined : "var(--text-3)"
+          }}>
             {uploading
               ? <Loader2 size={24} className="animate-spin" />
               : <UploadCloud size={24} />
@@ -111,10 +116,10 @@ export default function UploadSection({ agent, onUpdate }: Props) {
 
           {/* Text */}
           <div>
-            <p className="text-white font-medium">
+            <p className="font-medium" style={{ color: "var(--text-1)" }}>
               {uploading ? t("upload", "uploading") : t("upload", "dropFiles")}
             </p>
-            <p className="text-xs text-white/40 mt-1">
+            <p className="text-xs mt-1" style={{ color: "var(--text-3)" }}>
               {t("upload", "fileLimit")}
             </p>
           </div>
@@ -135,7 +140,7 @@ export default function UploadSection({ agent, onUpdate }: Props) {
       {/* Files List */}
       {files.length > 0 && (
         <div className="space-y-2">
-          <p className="text-xs font-medium text-white/60 uppercase tracking-wide">
+          <p className="text-xs font-medium uppercase tracking-wide" style={{ color: "var(--text-3)" }}>
             {files.length} file{files.length !== 1 ? "s" : ""} uploaded
           </p>
           <div className="space-y-2">
@@ -145,16 +150,20 @@ export default function UploadSection({ agent, onUpdate }: Props) {
                 className={cn(
                   "group flex items-center gap-3 px-4 py-3",
                   "rounded-lg border transition-all duration-200",
-                  "bg-white/5 border-white/10 hover:bg-white/8 hover:border-white/20"
+                  "hover:bg-opacity-8"
                 )}
+                style={{
+                  background: "var(--surface)",
+                  borderColor: "var(--border)"
+                }}
               >
                 {/* Icon */}
-                <div className="p-2 rounded-lg bg-blue-500/15 text-blue-400 shrink-0">
+                <div className="p-2 rounded-lg text-blue-400 shrink-0" style={{ background: "rgba(59,130,246,0.15)" }}>
                   <FileText size={16} />
                 </div>
 
                 {/* Filename */}
-                <p className="flex-1 text-sm text-white/75 font-medium truncate">
+                <p className="flex-1 text-sm font-medium truncate" style={{ color: "var(--text-1)" }}>
                   {file.name}
                 </p>
 
@@ -163,9 +172,10 @@ export default function UploadSection({ agent, onUpdate }: Props) {
                   onClick={() => handleDelete(file.name)}
                   className={cn(
                     "p-2 rounded-lg transition-all duration-200",
-                    "text-white/40 hover:text-red-400",
+                    "hover:text-red-400",
                     "hover:bg-red-500/10 opacity-0 group-hover:opacity-100"
                   )}
+                  style={{ color: "var(--text-3)" }}
                   title="Delete file"
                 >
                   <Trash2 size={16} />
@@ -208,7 +218,7 @@ export default function UploadSection({ agent, onUpdate }: Props) {
 
       {/* Error Message */}
       {error && (
-        <div className="p-3 rounded-lg bg-red-500/15 border border-red-500/30 text-red-400 text-sm">
+        <div className="p-3 rounded-lg text-red-400 text-sm" style={{ background: "rgba(239,68,68,0.15)", borderColor: "rgba(239,68,68,0.3)", border: "1px solid" }}>
           <p className="font-medium">⚠ {error}</p>
         </div>
       )}

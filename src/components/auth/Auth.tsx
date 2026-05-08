@@ -64,6 +64,7 @@ const BrandPanel = ({ mode, compact, t }: { mode: AuthMode; compact?: boolean; t
       padding: compact ? "32px 32px 28px" : "52px",
       overflow: "hidden",
       minHeight: compact ? "auto" : undefined,
+      background: "var(--black)",
     }}>
       <GridBg />
 
@@ -78,7 +79,7 @@ const BrandPanel = ({ mode, compact, t }: { mode: AuthMode; compact?: boolean; t
           animation: "agPulse 2.5s ease-in-out infinite",
         }} />
         <Link href="/">
-          <span style={{ fontFamily: "'Syne',sans-serif", fontWeight: 800, fontSize: "21px", letterSpacing: "-0.4px", color: "#fff" }}>
+          <span style={{ fontFamily: "'Syne',sans-serif", fontWeight: 800, fontSize: "21px", letterSpacing: "-0.4px", color: "var(--text-1)" }}>
             AgentLab
           </span>
         </Link>
@@ -89,7 +90,7 @@ const BrandPanel = ({ mode, compact, t }: { mode: AuthMode; compact?: boolean; t
         <h2 key={title} style={{
           fontFamily: "'Syne',sans-serif", fontWeight: 600,
           fontSize: compact ? "36px" : "40px", lineHeight: 1.0, letterSpacing: "-2px",
-          color: "#fff", margin: "0 0 14px",
+          color: "var(--text-1)", margin: "0 0 14px",
           animation: "agFadeUp 0.4s cubic-bezier(.16,1,.3,1) both",
         }}>
           {title}
@@ -97,7 +98,7 @@ const BrandPanel = ({ mode, compact, t }: { mode: AuthMode; compact?: boolean; t
 
         <p key={sub} style={{
           fontFamily: "'Syne',sans-serif", fontSize: "15px",
-          lineHeight: 1.65, color: "rgba(255,255,255,0.45)",
+          lineHeight: 1.65, color: "var(--text-3)",
           maxWidth: compact ? "100%" : "300px", margin: 0,
           animation: "agFadeUp 0.4s cubic-bezier(.16,1,.3,1) 0.07s both",
         }}>
@@ -110,14 +111,14 @@ const BrandPanel = ({ mode, compact, t }: { mode: AuthMode; compact?: boolean; t
         position: "relative", zIndex: 1,
         display: "flex", gap: compact ? "24px" : "32px",
         paddingTop: "28px", marginTop: compact ? "24px" : "0",
-        borderTop: "1px solid rgba(255,255,255,0.07)",
+        borderTop: `1px solid var(--border)`,
       }}>
         {stats.map(s => (
           <div key={s.label}>
-            <div style={{ fontFamily: "'Syne',sans-serif", fontWeight: 800, fontSize: compact ? "18px" : "22px", letterSpacing: "-0.5px", color: "#fff", lineHeight: 1 }}>
+            <div style={{ fontFamily: "'Syne',sans-serif", fontWeight: 800, fontSize: compact ? "18px" : "22px", letterSpacing: "-0.5px", color: "var(--text-1)", lineHeight: 1 }}>
               {s.val}
             </div>
-            <div style={{ fontFamily: "'Syne',sans-serif", fontSize: "12px", color: "rgba(255,255,255,0.32)", marginTop: "4px" }}>
+            <div style={{ fontFamily: "'Syne',sans-serif", fontSize: "12px", color: "var(--text-3)", marginTop: "4px" }}>
               {s.label}
             </div>
           </div>
@@ -208,9 +209,9 @@ export default function AuthLayout() {
         .ag-wrap {
           display:flex; align-items:center; gap:10px;
           padding:13px 20px;
-          border:1px solid rgba(255,255,255,0.1);
+          border:1px solid var(--border);
           border-radius:100px;
-          background:rgba(255,255,255,0.03);
+          background:var(--input-bg);
           transition:border-color .2s, box-shadow .2s;
           width:100%;
         }
@@ -221,11 +222,11 @@ export default function AuthLayout() {
         .ag-inp {
           flex:1; min-width:0;
           background:transparent; border:none; outline:none;
-          color:#fff;
+          color:var(--text-1);
           font-family:'Syne',sans-serif;
           font-size:14px;
         }
-        .ag-inp::placeholder { color:rgba(255,255,255,0.28); }
+        .ag-inp::placeholder { color:var(--text-3); }
         .ag-inp:disabled     { opacity:.4; }
 
         .ag-btn {
@@ -282,11 +283,11 @@ export default function AuthLayout() {
         .ag-h1 {
           font-family:'Syne',sans-serif; font-weight:800;
           font-size:34px; letter-spacing:-1.2px; line-height:1.1;
-          color:#fff; margin-bottom:6px;
+          color:var(--text-1); margin-bottom:6px;
         }
         .ag-sub {
           font-family:'Syne',sans-serif; font-size:14px;
-          color:rgba(255,255,255,0.4); line-height:1.6;
+          color:var(--text-3); line-height:1.6;
         }
         .ag-link {
           background:none; border:none; padding:0;
@@ -298,16 +299,16 @@ export default function AuthLayout() {
         .ag-ghost {
           background:none; border:none; padding:0;
           font-family:'Syne',sans-serif; font-size:13px;
-          color:rgba(255,255,255,0.35); cursor:pointer; transition:color .2s;
+          color:var(--text-3); cursor:pointer; transition:color .2s;
           display:inline-flex; align-items:center; gap:6px;
         }
-        .ag-ghost:hover { color:rgba(255,255,255,0.75); }
+        .ag-ghost:hover { color:var(--text-1); }
         .ag-icon-btn {
           background:none; border:none; padding:0; cursor:pointer;
-          color:rgba(255,255,255,0.3); display:flex; align-items:center;
+          color:var(--text-3); display:flex; align-items:center;
           transition:color .2s; flex-shrink:0;
         }
-        .ag-icon-btn:hover { color:rgba(255,255,255,0.7); }
+        .ag-icon-btn:hover { color:var(--text-1); }
         .ag-spinner {
           width:15px; height:15px; flex-shrink:0;
           border:2px solid rgba(255,255,255,0.2); border-top-color:#fff;
@@ -324,7 +325,7 @@ export default function AuthLayout() {
       {/* ── Page root ──────────────────────────────────────────────── */}
       <div style={{
         minHeight: "100vh",
-        background: "#080808",
+        background: "var(--black)",
         display: "flex",
         alignItems: isDesktop ? "center" : "flex-start",
         justifyContent: "center",
@@ -345,9 +346,9 @@ export default function AuthLayout() {
           position: "relative", zIndex: 1,
           width: "100%",
           maxWidth: isDesktop ? "1040px" : isTablet ? "600px" : "100%",
-          background: "#111",
+          background: "var(--card)",
           borderRadius: isDesktop ? "44px" : isMobile ? "24px" : "32px",
-          border: "1px solid rgba(255,255,255,0.07)",
+          border: `1px solid var(--border)`,
           boxShadow: "0 40px 100px rgba(0,0,0,0.5),0 0 0 1px rgba(1,71,255,0.04)",
           display: "flex",
           flexDirection: isDesktop ? "row" : "column",
@@ -369,11 +370,11 @@ export default function AuthLayout() {
             ...(isDesktop
               ? { width: "1px", alignSelf: "stretch" }
               : { height: "1px", width: "100%" }),
-            background: "rgba(255,255,255,0.06)",
+            background: "var(--border)",
             flexShrink: 0,
           }} />
 
-          {/* ── Form panel ─────────────────��───────────────────────── */}
+          {/* ── Form panel ─────────────────────────────────────────── */}
           <div style={{
             flex: 1,
             display: "flex",
@@ -387,6 +388,7 @@ export default function AuthLayout() {
               : "32px 20px 40px",
             minWidth: 0,
             position: "relative",
+            background: "var(--surface)",
           }}>
             {/* Form container */}
             <div
