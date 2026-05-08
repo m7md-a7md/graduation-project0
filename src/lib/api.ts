@@ -87,8 +87,8 @@ export const uploadFile = async (agentId: string, file: File): Promise<void> => 
   })
 }
 
-export const deleteFile = async (agentId: string): Promise<void> => {
-  await axiosInstance.delete(`/upload/${agentId}/delete`)
+export const deleteFile = async (agentId: string, fileName: string): Promise<void> => {
+  await axiosInstance.delete(`/upload/${agentId}/delete`, { data: { file_name: fileName } })
 }
 
 // ── Training Functions ───────────────────────────────────────────
