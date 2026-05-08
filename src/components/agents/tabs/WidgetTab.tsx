@@ -29,12 +29,14 @@ export default function WidgetTab({ agentId }: { agentId: string }) {
     }
   }
 
-  const handleCopy = (type: "code" | "key") => {
-    if (!widget) return
-    navigator.clipboard.writeText(type === "code" ? widget.embed_code : widget.public_key)
-    setCopied(type)
-    setTimeout(() => setCopied(null), 2000)
-  }
+const handleCopy = (type: "code" | "key") => {
+  if (!widget) return
+  const text = type === "code" ? widget.embed_code : widget.public_key
+  if (!text) return
+  navigator.clipboard.writeText(text)
+  setCopied(type)
+  setTimeout(() => setCopied(null), 2000)
+}
 
   if (loading) return (
     <div className="flex items-center justify-center py-12">
