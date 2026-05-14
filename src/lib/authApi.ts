@@ -4,7 +4,7 @@
 // ─────────────────────────────────────────────────────────────
 
 const BASE =
-"https://finalproject-production-7b29.up.railway.app/api/v1/auth";
+"https://apinodejssecure-production.up.railway.app/api/v1/auth";
 
 // ── Types ────────────────────────────────────────────────────
 export interface User {

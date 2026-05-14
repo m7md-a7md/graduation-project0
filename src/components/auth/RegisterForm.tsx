@@ -36,7 +36,15 @@ export default function RegisterForm({ onSwitchToLogin }: Props) {
   const [showConfirm, setShowConfirm]   = useState(false);
   const [error, setError]               = useState("");
 
+  // ✅ Both useMemo hooks are now BEFORE any early returns
   const strength = useMemo(() => getStrength(password), [password]);
+
+  const strengthLabel = useMemo(() => {
+    if (strength.score <= 1) return t("auth", "register.strength.weak") || "Weak";
+    if (strength.score <= 2) return t("auth", "register.strength.fair") || "Fair";
+    if (strength.score <= 3) return t("auth", "register.strength.good") || "Good";
+    return t("auth", "register.strength.strong") || "Strong";
+  }, [strength.score, t]);
 
   const validate = (): string | null => {
     if (!name.trim())                   return t("auth", "form.errors.nameRequired") || "Please enter your name";
@@ -84,7 +92,16 @@ export default function RegisterForm({ onSwitchToLogin }: Props) {
             {". " + (t("auth", "register.verify.checkInbox") || "Please check your inbox.")}
           </p>
         </div>
-        <button onClick={onSwitchToLogin} className="ag-btn" style={{ marginTop: "8px" }}>
+        <button
+          onClick={() => {
+            if (onSwitchToLogin) {
+              onSwitchToLogin();
+            } else {
+              window.location.href = "/auth";
+            }
+          }}
+          className="ag-btn"
+        >
           {t("auth", "register.verify.goToSignIn") || "Go to Sign In"}
         </button>
         <p style={{ fontFamily: "'Syne',sans-serif", fontSize: "12px", color: "var(--text-3)" }}>
@@ -105,13 +122,6 @@ export default function RegisterForm({ onSwitchToLogin }: Props) {
   }
 
   // ── Step 1: Registration form ────────────────────────────
-  const strengthLabel = useMemo(() => {
-    if (strength.score <= 1) return t("auth", "register.strength.weak") || "Weak";
-    if (strength.score <= 2) return t("auth", "register.strength.fair") || "Fair";
-    if (strength.score <= 3) return t("auth", "register.strength.good") || "Good";
-    return t("auth", "register.strength.strong") || "Strong";
-  }, [strength.score, t]);
-
   return (
     <div className="ag-stack" style={{ animation: "agFadeUp .45s cubic-bezier(.16,1,.3,1) both" }}>
       <div>

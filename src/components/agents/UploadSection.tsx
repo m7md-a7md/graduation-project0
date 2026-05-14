@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react"
 import { uploadFile, deleteFile, trainAgent, type Agent } from "@/lib/api"
-import { UploadCloud, FileText, Trash2, Sparkles, Loader2, Plus } from "lucide-react"
+import { UploadCloud, FileText, Trash2, Sparkles, Loader2 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useTranslation } from "@/hooks/useTranslation"
 
@@ -38,16 +38,16 @@ export default function UploadSection({ agent, onUpdate }: Props) {
   const [error, setError] = useState("")
   const { t } = useTranslation()
 
+  // Single file from API — not an array
+  const file = agent.file_name ? { name: agent.file_name, path: agent.file_path } : null
 
-  const files = agent.files || []
-
-  const handleUpload = async (file: File) => {
-    if (!isFileAllowed(file)) return setError("نوع الملف غير مدعوم. الأنواع المسموح بها: PDF, Word, Excel, صور, نص.")
-    if (file.size > 10 * 1024 * 1024) return setError("File size must be under 10MB")
+  const handleUpload = async (uploadedFile: File) => {
+    if (!isFileAllowed(uploadedFile)) return setError("نوع الملف غير مدعوم. الأنواع المسموح بها: PDF, Word, Excel, صور, نص.")
+    if (uploadedFile.size > 10 * 1024 * 1024) return setError("File size must be under 10MB")
     setUploading(true)
     setError("")
     try {
-      await uploadFile(agent.agent_id, file)
+      await uploadFile(agent.agent_id, uploadedFile)
       onUpdate()
     } catch {
       setError("Upload failed. Please try again.")
@@ -56,9 +56,9 @@ export default function UploadSection({ agent, onUpdate }: Props) {
     }
   }
 
-  const handleDelete = async (fileName: string) => {
+  const handleDelete = async () => {
     try {
-      await deleteFile(agent.agent_id, fileName)
+      await deleteFile(agent.agent_id)
       onUpdate()
     } catch {
       setError("Failed to delete file.")
@@ -91,43 +91,45 @@ export default function UploadSection({ agent, onUpdate }: Props) {
       </div>
 
       {/* Drop Zone */}
-<div
-  onClick={() => !uploading && inputRef.current?.click()}
-  onDragOver={(e) => { e.preventDefault(); setDragOver(true) }}
-  onDragLeave={() => setDragOver(false)}
-  onDrop={(e) => {
-    e.preventDefault()
-    setDragOver(false)
-    const droppedFiles = Array.from(e.dataTransfer.files)
-    droppedFiles.forEach(handleUpload)
-  }}
-  className={cn(
-    "group relative rounded-2xl border-2 border-dashed transition-all duration-200",
-    "p-8 flex flex-col items-center justify-center cursor-pointer",
-    "hover:border-blue-500/50 hover:bg-blue-500/5",
-    dragOver && "border-blue-500 bg-blue-500/10"
-  )}
-  style={{
-    borderColor: dragOver ? undefined : "var(--border)",
-    background: dragOver ? undefined : "var(--surface)"
-  }}
->
+      <div
+        onClick={() => !uploading && inputRef.current?.click()}
+        onDragOver={(e) => { e.preventDefault(); setDragOver(true) }}
+        onDragLeave={() => setDragOver(false)}
+        onDrop={(e) => {
+          e.preventDefault()
+          setDragOver(false)
+          const droppedFiles = Array.from(e.dataTransfer.files)
+          droppedFiles.forEach(handleUpload)
+        }}
+        className={cn(
+          "group relative rounded-2xl border-2 border-dashed transition-all duration-200",
+          "p-8 flex flex-col items-center justify-center cursor-pointer",
+          "hover:border-blue-500/50 hover:bg-blue-500/5",
+          dragOver && "border-blue-500 bg-blue-500/10"
+        )}
+        style={{
+          borderColor: dragOver ? undefined : "var(--border)",
+          background: dragOver ? undefined : "var(--surface)"
+        }}
+      >
         {/* Background Gradient */}
         <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-blue-500/0 via-transparent to-purple-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
-        
+
         <div className="relative space-y-3 text-center">
           {/* Icon */}
-          <div className={cn(
-            "mx-auto w-12 h-12 rounded-xl flex items-center justify-center",
-            "transition-all duration-200",
-            dragOver 
-              ? "bg-blue-500/20 text-blue-400" 
-              : "group-hover:bg-blue-500/15 group-hover:text-blue-400"
-          )}
-          style={{
-            background: dragOver ? undefined : "var(--surface)",
-            color: dragOver ? undefined : "var(--text-3)"
-          }}>
+          <div
+            className={cn(
+              "mx-auto w-12 h-12 rounded-xl flex items-center justify-center",
+              "transition-all duration-200",
+              dragOver
+                ? "bg-blue-500/20 text-blue-400"
+                : "group-hover:bg-blue-500/15 group-hover:text-blue-400"
+            )}
+            style={{
+              background: dragOver ? undefined : "var(--surface)",
+              color: dragOver ? undefined : "var(--text-3)"
+            }}
+          >
             {uploading
               ? <Loader2 size={24} className="animate-spin" />
               : <UploadCloud size={24} />
@@ -142,7 +144,6 @@ export default function UploadSection({ agent, onUpdate }: Props) {
             <p className="text-xs mt-1" style={{ color: "var(--text-3)" }}>
               {t("upload", "fileLimit")}
             </p>
-            {/* Allowed types hint */}
             <p className="text-xs mt-1" style={{ color: "var(--text-3)" }}>
               PDF · Word · Excel · Images · TXT
             </p>
@@ -152,67 +153,47 @@ export default function UploadSection({ agent, onUpdate }: Props) {
         <input
           ref={inputRef}
           type="file"
-          multiple
           accept=".pdf,.doc,.docx,.xls,.xlsx,.txt,.png,.jpg,.jpeg,.gif,.webp"
           className="hidden"
           onChange={(e) => {
-            const selectedFiles = Array.from(e.target.files || [])
-            selectedFiles.forEach(handleUpload)
+            const selected = Array.from(e.target.files || [])
+            selected.forEach(handleUpload)
+            // Reset so the same file can be re-uploaded after deletion
+            e.target.value = ""
           }}
         />
       </div>
 
-      {/* Files List */}
-      {files.length > 0 && (
+      {/* File Display — single file only */}
+      {file && (
         <div className="space-y-2">
           <p className="text-xs font-medium uppercase tracking-wide" style={{ color: "var(--text-3)" }}>
-            {files.length} file{files.length !== 1 ? "s" : ""} uploaded
+            1 file uploaded
           </p>
-          <div className="space-y-2">
-            {files.map((file, i) => (
-              <div
-                key={i}
-                className={cn(
-                  "group flex items-center gap-3 px-4 py-3",
-                  "rounded-lg border transition-all duration-200",
-                  "hover:bg-opacity-8"
-                )}
-                style={{
-                  background: "var(--surface)",
-                  borderColor: "var(--border)"
-                }}
-              >
-                {/* Icon */}
-                <div className="p-2 rounded-lg text-blue-400 shrink-0" style={{ background: "rgba(59,130,246,0.15)" }}>
-                  <FileText size={16} />
-                </div>
-
-                {/* Filename */}
-                <p className="flex-1 text-sm font-medium truncate" style={{ color: "var(--text-1)" }}>
-                  {file.name}
-                </p>
-
-                {/* Delete Button */}
-                <button
-                  onClick={() => handleDelete(file.name)}
-                  className={cn(
-                    "p-2 rounded-lg transition-all duration-200",
-                    "hover:text-red-400",
-                    "hover:bg-red-500/10 opacity-0 group-hover:opacity-100"
-                  )}
-                  style={{ color: "var(--text-3)" }}
-                  title="Delete file"
-                >
-                  <Trash2 size={16} />
-                </button>
-              </div>
-            ))}
+          <div
+            className="group flex items-center gap-3 px-4 py-3 rounded-lg border transition-all duration-200"
+            style={{ background: "var(--surface)", borderColor: "var(--border)" }}
+          >
+            <div className="p-2 rounded-lg text-blue-400 shrink-0" style={{ background: "rgba(59,130,246,0.15)" }}>
+              <FileText size={16} />
+            </div>
+            <p className="flex-1 text-sm font-medium truncate" style={{ color: "var(--text-1)" }}>
+              {file.name}
+            </p>
+            <button
+              onClick={handleDelete}
+              className="p-2 rounded-lg transition-all duration-200 hover:text-red-400 hover:bg-red-500/10 opacity-0 group-hover:opacity-100"
+              style={{ color: "var(--text-3)" }}
+              title="Delete file"
+            >
+              <Trash2 size={16} />
+            </button>
           </div>
         </div>
       )}
 
       {/* Train Button */}
-      {files.length > 0 && (
+      {file && (
         <button
           onClick={handleTrain}
           disabled={training}
@@ -235,7 +216,7 @@ export default function UploadSection({ agent, onUpdate }: Props) {
           ) : (
             <>
               <Sparkles size={18} />
-              <span>{t("upload", "startTraining")} ({files.length})</span>
+              <span>{t("upload", "startTraining")}</span>
             </>
           )}
         </button>
@@ -243,7 +224,10 @@ export default function UploadSection({ agent, onUpdate }: Props) {
 
       {/* Error Message */}
       {error && (
-        <div className="p-3 rounded-lg text-red-400 text-sm" style={{ background: "rgba(239,68,68,0.15)", borderColor: "rgba(239,68,68,0.3)", border: "1px solid" }}>
+        <div
+          className="p-3 rounded-lg text-red-400 text-sm"
+          style={{ background: "rgba(239,68,68,0.15)", border: "1px solid rgba(239,68,68,0.3)" }}
+        >
           <p className="font-medium">⚠ {error}</p>
         </div>
       )}

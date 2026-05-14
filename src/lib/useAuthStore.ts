@@ -1,32 +1,21 @@
-// ─────────────────────────────────────────────────────────────
-//  Auth Store — Zustand
-//  Manages: access_token, user, loading, error states
-//  Install: npm install zustand
-// ─────────────────────────────────────────────────────────────
-
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import * as api from "@/lib/authApi";
 import type { User } from "@/lib/authApi";
 
-// ── State shape ───────────────────────────────────────────────
 interface AuthState {
-  // Data
   user:         User | null;
   accessToken:  string | null;
   isLoading:    boolean;
   error:        string | null;
 
-  // Computed helpers
   isLoggedIn:   () => boolean;
 
-  // Actions — Auth
   register:     (name: string, email: string, password: string) => Promise<void>;
   login:        (email: string, password: string) => Promise<void>;
   logout:       () => Promise<void>;
   refreshToken: () => Promise<void>;
 
-  // Actions — Profile
   fetchProfile:       () => Promise<void>;
   updateName:         (name: string) => Promise<void>;
   changePassword:     (oldPw: string, newPw: string) => Promise<void>;
@@ -35,36 +24,32 @@ interface AuthState {
   requestEmailChange: (newEmail: string) => Promise<void>;
   deleteAccount:      () => Promise<void>;
 
-  // Internal helpers
   _setError:   (msg: string | null) => void;
   _clearAuth:  () => void;
 }
 
-// ── Store ─────────────────────────────────────────────────────
 export const useAuthStore = create<AuthState>()(
   persist(
     (set, get) => ({
-      // ── Initial state ──────────────────────────────────────
       user:        null,
       accessToken: null,
       isLoading:   false,
       error:       null,
 
-      // ── Computed ───────────────────────────────────────────
       isLoggedIn: () => !!get().accessToken && !!get().user,
 
-      // ── Internal helpers ───────────────────────────────────
       _setError:  (msg) => set({ error: msg }),
-      _clearAuth: () => set({ user: null, accessToken: null, error: null }),
+      _clearAuth: () => {
+        // امسح من الـ store والـ localStorage
+        localStorage.removeItem("access_token")
+        set({ user: null, accessToken: null, error: null })
+      },
 
-      // ══════════════════════════════════════════════════════
-      //  1) Register
-      // ══════════════════════════════════════════════════════
+      // ── Register ──────────────────────────────────────────
       register: async (name, email, password) => {
         set({ isLoading: true, error: null });
         try {
           await api.register(name, email, password);
-          // No token returned — user must verify email then login
         } catch (e: unknown) {
           const msg = e instanceof Error ? e.message : "Registration failed";
           set({ error: msg });
@@ -74,15 +59,16 @@ export const useAuthStore = create<AuthState>()(
         }
       },
 
-      // ══════════════════════════════════════════════════════
-      //  4) Login
-      // ══════════════════════════════════════════════════════
+      // ── Login ─────────────────────────────────────────────
       login: async (email, password) => {
         set({ isLoading: true, error: null });
         try {
           const res = await api.login(email, password);
+
           set({ accessToken: res.access_token });
-          // Fetch profile after successful login
+
+          localStorage.setItem("access_token", res.access_token);
+
           await get().fetchProfile();
         } catch (e: unknown) {
           const msg = e instanceof Error ? e.message : "Login failed";
@@ -93,37 +79,32 @@ export const useAuthStore = create<AuthState>()(
         }
       },
 
-      // ══════════════════════════════════════════════════════
-      //  5) Logout
-      // ══════════════════════════════════════════════════════
+      // ── Logout ────────────────────────────────────────────
       logout: async () => {
         set({ isLoading: true, error: null });
         try {
           const token = get().accessToken;
           if (token) await api.logout(token);
         } catch {
-          // Even if API fails, clear local state
+          // حتى لو فشل → امسح
         } finally {
           get()._clearAuth();
           set({ isLoading: false });
         }
       },
 
-      // ══════════════════════════════════════════════════════
-      //  6) Refresh token
-      // ══════════════════════════════════════════════════════
+      // ── Refresh Token ─────────────────────────────────────
       refreshToken: async () => {
         try {
           const res = await api.refreshToken();
           set({ accessToken: res.access_token });
+          localStorage.setItem("access_token", res.access_token);
         } catch {
           get()._clearAuth();
         }
       },
 
-      // ══════════════════════════════════════════════════════
-      //  7) Get profile
-      // ══════════════════════════════════════════════════════
+      // ── Fetch Profile ─────────────────────────────────────
       fetchProfile: async () => {
         const token = get().accessToken;
         if (!token) return;
@@ -136,16 +117,13 @@ export const useAuthStore = create<AuthState>()(
         }
       },
 
-      // ══════════════════════════════════════════════════════
-      //  8) Update name
-      // ══════════════════════════════════════════════════════
+      // ── Update Name ───────────────────────────────────────
       updateName: async (name) => {
         const token = get().accessToken;
         if (!token) return;
         set({ isLoading: true, error: null });
         try {
           await api.updateProfileName(name, token);
-          // Update local user state optimistically
           const user = get().user;
           if (user) set({ user: { ...user, name } });
         } catch (e: unknown) {
@@ -157,9 +135,7 @@ export const useAuthStore = create<AuthState>()(
         }
       },
 
-      // ══════════════════════════════════════════════════════
-      //  9) Change password (inside account)
-      // ══════════════════════════════════════════════════════
+      // ── Change Password ───────────────────────────────────
       changePassword: async (oldPw, newPw) => {
         const token = get().accessToken;
         if (!token) return;
@@ -175,9 +151,7 @@ export const useAuthStore = create<AuthState>()(
         }
       },
 
-      // ══════════════════════════════════════════════════════
-      //  10) Forgot password
-      // ══════════════════════════════════════════════════════
+      // ── Forgot Password ───────────────────────────────────
       forgotPassword: async (email) => {
         set({ isLoading: true, error: null });
         try {
@@ -191,9 +165,7 @@ export const useAuthStore = create<AuthState>()(
         }
       },
 
-      // ══════════════════════════════════════════════════════
-      //  11) Reset password by token (from email link)
-      // ══════════════════════════════════════════════════════
+      // ── Reset Password ────────────────────────────────────
       resetPassword: async (token, newPw) => {
         set({ isLoading: true, error: null });
         try {
@@ -207,9 +179,7 @@ export const useAuthStore = create<AuthState>()(
         }
       },
 
-      // ══════════════════════════════════════════════════════
-      //  12) Request email change
-      // ══════════════════════════════════════════════════════
+      // ── Request Email Change ──────────────────────────────
       requestEmailChange: async (newEmail) => {
         const token = get().accessToken;
         if (!token) return;
@@ -225,9 +195,7 @@ export const useAuthStore = create<AuthState>()(
         }
       },
 
-      // ══════════════════════════════════════════════════════
-      //  14) Delete account
-      // ══════════════════════════════════════════════════════
+      // ── Delete Account ────────────────────────────────────
       deleteAccount: async () => {
         const token = get().accessToken;
         if (!token) return;
@@ -246,8 +214,8 @@ export const useAuthStore = create<AuthState>()(
     }),
 
     {
-      name: "agentlab-auth",           // localStorage key
-      partialize: (state) => ({        // only persist token (not loading/error)
+      name: "agentlab-auth",
+      partialize: (state) => ({
         accessToken: state.accessToken,
         user: state.user,
       }),

@@ -12,8 +12,8 @@ import { cn } from "@/lib/utils"
 import { useTranslation } from "@/hooks/useTranslation"
 
 const AGENT_TYPES = [
-  { value: "customer_support" as AgentType, icon: HeadphonesIcon, labelKey: "customerSupport", descKey: "csDescription" },
-  { value: "knowledge_base"   as AgentType, icon: BookOpen,        labelKey: "knowledgeBase",   descKey: "kbDescription" },
+  { value: "customer support" as AgentType, icon: HeadphonesIcon, labelKey: "customerSupport", descKey: "csDescription" },
+  { value: "knowledge Base"   as AgentType, icon: BookOpen,        labelKey: "knowledgeBase",   descKey: "kbDescription" },
   { value: "analysis"         as AgentType, icon: BarChart2,       labelKey: "analysis",        descKey: "anDescription" },
 ]
 

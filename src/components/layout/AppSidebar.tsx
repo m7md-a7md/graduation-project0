@@ -7,9 +7,10 @@ import { useRouter, usePathname } from "next/navigation"
 import {
   Plus, Bot, ChevronLeft, ChevronRight, LogOut, Trash2,
   User, Headphones, BookOpen, BarChart2, Settings,
-  HelpCircle, Sun, Moon, Menu, X,
+  HelpCircle, Menu, X,
 } from "lucide-react"
 import { getAgents, type Agent } from "@/lib/api"
+import { useAuthStore } from "@/lib/useAuthStore"
 import { cn } from "@/lib/utils"
 import { useTranslation } from "@/hooks/useTranslation"
 import Link from "next/link"
@@ -44,96 +45,67 @@ function SidebarContent({
 }) {
   const router   = useRouter()
   const pathname = usePathname()
-  const { t, locale, changeLocale } = useTranslation()
-  const [agents, setAgents] = useState<Agent[]>([])
+  const { t } = useTranslation()
+  const { user, logout, deleteAccount } = useAuthStore()
+
+  const [agents, setAgents]                   = useState<Agent[]>([])
   const [showAccountMenu, setShowAccountMenu] = useState(false)
-  const [isDark, setIsDark] = useState(true)
   const accountMenuRef = useRef<HTMLDivElement>(null)
 
   const fetchAgents = useCallback(async () => {
-    const data = await getAgents()
-    setAgents(data)
+    try {
+      const data = await getAgents()
+      setAgents(data)
+    } catch { /* silent */ }
   }, [])
 
-  useEffect(() => {
-    fetchAgents()
-    const saved = localStorage.getItem("theme")
-    setIsDark(saved ? saved === "dark" : true)
-  }, [pathname, fetchAgents])
+  useEffect(() => { fetchAgents() }, [pathname, fetchAgents])
 
   useEffect(() => {
-    const onClickOutside = (e: MouseEvent) => {
+    const onOut = (e: MouseEvent) => {
       if (accountMenuRef.current && !accountMenuRef.current.contains(e.target as Node))
         setShowAccountMenu(false)
     }
     const onEsc = (e: KeyboardEvent) => { if (e.key === "Escape") setShowAccountMenu(false) }
-    document.addEventListener("mousedown", onClickOutside)
+    document.addEventListener("mousedown", onOut)
     document.addEventListener("keydown", onEsc)
-    return () => {
-      document.removeEventListener("mousedown", onClickOutside)
-      document.removeEventListener("keydown", onEsc)
-    }
+    return () => { document.removeEventListener("mousedown", onOut); document.removeEventListener("keydown", onEsc) }
   }, [])
 
-  const navigate = (path: string) => {
-    router.push(path)
-    onClose?.()
+  const navigate = (path: string) => { router.push(path); onClose?.() }
+
+  const handleLogout = async () => {
+    setShowAccountMenu(false)
+    await logout()
+    router.push("/login")
   }
 
-  const toggleTheme = () => {
-    const next = !isDark
-    setIsDark(next)
-    localStorage.setItem("theme", next ? "dark" : "light")
-    document.documentElement.classList.toggle("dark", next)
+  const handleDeleteAccount = async () => {
+    setShowAccountMenu(false)
+    if (!window.confirm("Are you sure? This cannot be undone.")) return
+    try { await deleteAccount(); router.push("/login") } catch { /* handled in store */ }
   }
 
   const isCollapsed = collapsed && !isMobile
 
   return (
     <div className="flex flex-col h-full">
-
       {/* Header */}
       <header className={cn("h-[60px] flex items-center justify-between shrink-0 border-b border-white/[0.07]", isCollapsed ? "px-0 justify-center" : "px-4")}>
         {isCollapsed ? (
-          <button onClick={() => toggleCollapse(false)} className="p-2 rounded-lg text-white/30 hover:text-white hover:bg-white/[0.06] transition-all">
-            <ChevronRight size={15} />
-          </button>
+          <button onClick={() => toggleCollapse(false)} className="p-2 rounded-lg text-white/30 hover:text-white hover:bg-white/[0.06] transition-all"><ChevronRight size={15} /></button>
         ) : (
           <>
-<Link
-  href="/"
-  className="flex items-center gap-2.5 group"
->
-  <div
-    className="w-[30px] h-[30px] rounded-lg flex items-center justify-center shrink-0 transition-all duration-200 group-hover:scale-105"
-    style={{
-      background: "rgba(1,71,255,0.12)",
-      border: "1px solid rgba(1,71,255,0.2)",
-    }}
-  >
-    <Bot size={14} style={{ color: "#0147FF" }} />
-  </div>
-
-  <span
-    className="text-[15px] tracking-tight transition-opacity duration-200 group-hover:opacity-80"
-    style={{
-      fontFamily: "'Syne', sans-serif",
-      fontWeight: 700,
-      color: "var(--white)",
-    }}
-  >
-    AgentLab
-  </span>
-</Link>
-            {isMobile ? (
-              <button onClick={onClose} className="p-2 rounded-lg text-white/30 hover:text-white hover:bg-white/[0.06] transition-all">
-                <X size={15} />
-              </button>
-            ) : (
-              <button onClick={() => toggleCollapse(true)} className="p-2 rounded-lg text-white/30 hover:text-white hover:bg-white/[0.06] transition-all">
-                <ChevronLeft size={14} />
-              </button>
-            )}
+            <Link href="/" className="flex items-center gap-2.5 group">
+              <div className="w-[30px] h-[30px] rounded-lg flex items-center justify-center shrink-0" style={{ background: "rgba(1,71,255,0.12)", border: "1px solid rgba(1,71,255,0.2)" }}>
+                <Bot size={14} style={{ color: "#0147FF" }} />
+              </div>
+              <span className="text-[15px] tracking-tight" style={{ fontFamily: "'Syne', sans-serif", fontWeight: 700, color: "var(--white)" }}>AgentLab</span>
+            </Link>
+            {isMobile
+              ? <button onClick={onClose} className="p-2 rounded-lg text-white/30 hover:text-white hover:bg-white/[0.06] transition-all"><X size={15} /></button>
+              : <button onClick={() => toggleCollapse(true)} className="p-2 rounded-lg text-white/30 hover:text-white hover:bg-white/[0.06] transition-all"><ChevronLeft size={14} /></button>
+            }
           </>
         )}
       </header>
@@ -143,7 +115,7 @@ function SidebarContent({
         <button
           onClick={() => navigate("/dashboard?newAgent=true")}
           className={cn("w-full flex items-center gap-2 rounded-xl text-[13px] transition-all duration-200 hover:-translate-y-0.5", isCollapsed ? "justify-center p-2.5" : "px-3 py-2.5")}
-          style={{ fontFamily: "'Syne', sans-serif", fontWeight: 700, letterSpacing: "0.5px", background: "#0147FF", color: "#fff", border: "1px solid rgba(1,71,255,0.4)" }}
+          style={{ fontFamily: "'Syne', sans-serif", fontWeight: 700, background: "#0147FF", color: "#fff", border: "1px solid rgba(1,71,255,0.4)" }}
           onMouseEnter={e => { e.currentTarget.style.background = "#1a5cff"; e.currentTarget.style.boxShadow = "0 8px 24px rgba(1,71,255,0.35)" }}
           onMouseLeave={e => { e.currentTarget.style.background = "#0147FF"; e.currentTarget.style.boxShadow = "none" }}
         >
@@ -194,14 +166,11 @@ function SidebarContent({
         })}
       </div>
 
-      {/* Divider */}
       <div className="shrink-0 mx-3 h-px" style={{ background: "var(--border)" }} />
 
       {/* Footer */}
       {!isCollapsed && (
-        <div className="shrink-0 px-3 py-3 space-y-1">
-
-          {/* Help & Docs */}
+        <div className="shrink-0 px-3 py-3">
           <button
             className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-[13.5px] transition-colors duration-150"
             style={{ fontFamily: "'Syne', sans-serif", fontWeight: 500, color: "var(--text-subtle)" }}
@@ -217,9 +186,8 @@ function SidebarContent({
       {/* Account */}
       <div ref={accountMenuRef} className="shrink-0 p-3 relative" style={{ borderTop: "1px solid var(--border)" }}>
         <button
-          onClick={() => setShowAccountMenu((prev) => !prev)}
+          onClick={() => setShowAccountMenu(p => !p)}
           className={cn("w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-colors duration-150", isCollapsed && "justify-center")}
-          style={{ color: "var(--white)" }}
           onMouseEnter={e => e.currentTarget.style.background = "rgba(255,255,255,0.04)"}
           onMouseLeave={e => e.currentTarget.style.background = "transparent"}
         >
@@ -229,10 +197,10 @@ function SidebarContent({
           {!isCollapsed && (
             <div className="flex-1 text-left min-w-0">
               <p className="text-[13.5px] truncate" style={{ fontFamily: "'Syne', sans-serif", fontWeight: 600, color: "var(--white)" }}>
-                {t("sidebar", "account")}
+                {user?.name || t("sidebar", "account")}
               </p>
-              <p className="text-[11px]" style={{ color: "var(--text-faint)" }}>
-                {agents.length} {agents.length === 1 ? "agent" : "agents"}
+              <p className="text-[11px] truncate" style={{ color: "var(--text-faint)" }}>
+                {user?.email || `${agents.length} agents`}
               </p>
             </div>
           )}
@@ -250,29 +218,10 @@ function SidebarContent({
               onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,255,255,0.04)"; e.currentTarget.style.color = "var(--white)" }}
               onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "var(--text-subtle)" }}
             >
-              <Settings size={13} />
-              {t("sidebar", "settings")}
+              <Settings size={13} />{t("sidebar", "settings")}
             </button>
-            <button
-              onClick={() => setShowAccountMenu(false)}
-              className="w-full flex items-center gap-2.5 px-4 py-3 text-[13px] transition-colors"
-              style={{ fontFamily: "'Syne', sans-serif", fontWeight: 500, color: "#f87171", borderBottom: "1px solid var(--border)" }}
-              onMouseEnter={e => e.currentTarget.style.background = "rgba(239,68,68,0.08)"}
-              onMouseLeave={e => e.currentTarget.style.background = "transparent"}
-            >
-              <Trash2 size={13} />
-              {t("sidebar", "deleteAccount")}
-            </button>
-            <button
-              onClick={() => { setShowAccountMenu(false); router.push("/auth") }}
-              className="w-full flex items-center gap-2.5 px-4 py-3 text-[13px] transition-colors"
-              style={{ fontFamily: "'Syne', sans-serif", fontWeight: 500, color: "var(--text-subtle)" }}
-              onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,255,255,0.04)"; e.currentTarget.style.color = "var(--white)" }}
-              onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "var(--text-subtle)" }}
-            >
-              <LogOut size={13} />
-              {t("sidebar", "logout")}
-            </button>
+
+
           </div>
         )}
       </div>
@@ -288,48 +237,25 @@ export default function AppSidebar() {
 
   useEffect(() => {
     setMounted(true)
-    const saved = localStorage.getItem("sidebar_collapsed")
-    if (saved === "true") setCollapsed(true)
+    if (localStorage.getItem("sidebar_collapsed") === "true") setCollapsed(true)
   }, [])
 
   useEffect(() => { setMobileOpen(false) }, [pathname])
 
-  const toggleCollapse = (value: boolean) => {
-    setCollapsed(value)
-    localStorage.setItem("sidebar_collapsed", String(value))
-  }
+  const toggleCollapse = (v: boolean) => { setCollapsed(v); localStorage.setItem("sidebar_collapsed", String(v)) }
 
   if (!mounted) return null
 
   return (
     <>
-      {/* Mobile hamburger */}
-      <button
-        onClick={() => setMobileOpen(true)}
-        className="md:hidden fixed top-4 left-4 z-40 p-2 rounded-xl text-white/50 hover:text-white transition-colors"
-        style={{ background: "var(--card)", border: "1px solid var(--border)" }}
-      >
+      <button onClick={() => setMobileOpen(true)} className="md:hidden fixed top-4 left-4 z-40 p-2 rounded-xl text-white/50 hover:text-white transition-colors" style={{ background: "var(--card)", border: "1px solid var(--border)" }}>
         <Menu size={16} />
       </button>
-
-      {/* Mobile backdrop */}
-      {mobileOpen && (
-        <div className="md:hidden fixed inset-0 z-40 bg-black/60 backdrop-blur-sm" onClick={() => setMobileOpen(false)} />
-      )}
-
-      {/* Mobile drawer */}
-      <aside
-        className={cn("md:hidden fixed top-0 left-0 z-50 h-full w-[280px] flex flex-col transition-transform duration-300 ease-out border-r border-white/[0.07]", mobileOpen ? "translate-x-0" : "-translate-x-full")}
-        style={{ background: "var(--card)" }}
-      >
+      {mobileOpen && <div className="md:hidden fixed inset-0 z-40 bg-black/60 backdrop-blur-sm" onClick={() => setMobileOpen(false)} />}
+      <aside className={cn("md:hidden fixed top-0 left-0 z-50 h-full w-[280px] flex flex-col transition-transform duration-300 ease-out border-r border-white/[0.07]", mobileOpen ? "translate-x-0" : "-translate-x-full")} style={{ background: "var(--card)" }}>
         <SidebarContent collapsed={false} toggleCollapse={toggleCollapse} onClose={() => setMobileOpen(false)} isMobile={true} />
       </aside>
-
-      {/* Desktop sidebar */}
-      <aside
-        className={cn("hidden md:flex relative shrink-0 h-screen flex-col transition-all duration-250 ease-out border-r border-white/[0.07]", collapsed ? "w-[60px]" : "w-[260px]")}
-        style={{ background: "var(--card)" }}
-      >
+      <aside className={cn("hidden md:flex relative shrink-0 h-screen flex-col transition-all duration-250 ease-out border-r border-white/[0.07]", collapsed ? "w-[60px]" : "w-[260px]")} style={{ background: "var(--card)" }}>
         <SidebarContent collapsed={collapsed} toggleCollapse={toggleCollapse} isMobile={false} />
       </aside>
     </>

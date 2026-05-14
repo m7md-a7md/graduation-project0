@@ -2,8 +2,6 @@ import { Suspense } from "react";
 import AuthLayout from "@/components/auth/Auth";
 
 
-// This page renders the full Auth layout.
-// Wrapped in Suspense because AuthLayout uses useSearchParams() internally.
 export default function AuthPage() {
   return (
 

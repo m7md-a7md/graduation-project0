@@ -28,8 +28,8 @@ export default function TestTab({ agentId, onMessageSent }: Props) {
     setLoading(true)
     onMessageSent?.()
     try {
-      const answer = await testAgent(agentId, text)
-      setMessages((prev) => [...prev, { role: "agent", content: answer }])
+const { answer } = await testAgent(agentId, text)
+setMessages((prev) => [...prev, { role: "agent", content: answer }])
     } catch {
       setMessages((prev) => [...prev, { role: "agent", content: "Something went wrong." }])
     } finally {

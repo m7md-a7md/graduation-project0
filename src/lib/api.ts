@@ -2,7 +2,7 @@
 import axiosInstance from "@/lib/axios"
 
 // ── Types ────────────────────────────────────────────────────────
-export type AgentType = "customer_support" | "knowledge_base" | "analysis"
+export type AgentType = "customer support" | "knowledge Base" | "analysis"
 export type AiStatus = "idle" | "processing" | "ready" | "failed"
 
 export type Agent = {
@@ -16,7 +16,6 @@ export type Agent = {
   file_path: string | null
   file_key: string | null
   file_type: string | null
-  // للتوافق مع الكود القديم
   files?: { name: string; path: string }[]
 }
 
@@ -31,7 +30,6 @@ export type Widget = {
     primaryColor: string
     textColor: string
   }
-  // للتوافق مع الكود القديم
   public_key?: string
   embed_code?: string
 }
@@ -105,7 +103,7 @@ export const testAgent = async (
   return data.answer
 }
 
-// ── Widget Functions ─────────────────────────────────────────────
+// ── Widget Functions 
 
 export const getWidget = async (agentId: string): Promise<Widget | null> => {
   try {
@@ -132,14 +130,13 @@ export const createWidget = async (
   }
 
   const { data } = await axiosInstance.post(`/widgets/${agentId}`, body)
-
-  // لو الـ widget موجود بالفعل، السيرفر بيرجع الموجود
+  
   const widget = data.widget
   return {
     ...widget,
     publicKey: data.publicKey,
     embed_code: data.embed_code,
-    // للتوافق مع الكود القديم
+  
     public_key: data.publicKey,
   }
 }
@@ -148,7 +145,6 @@ export const deleteWidget = async (agentId: string): Promise<void> => {
   await axiosInstance.delete(`/widgets/${agentId}`)
 }
 
-// ── Public Widget Functions (لا تحتاج Auth) ──────────────────────
 
 export const initWidgetSession = async (
   publicKey: string

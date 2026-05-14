@@ -4,7 +4,9 @@
     "useCases": "Use Cases",
     "howItWorks": "How It Works",
     "signIn": "Sign In",
-    "getStarted": "Get Started"
+    "getStarted": "Get Started",
+    "dashboard": "Dashboard",
+    "goToDashboard": "Go to Dashboard"
   },
   "hero": {
     "title1": "Create Your Own AI Agent —",
@@ -12,12 +14,25 @@
     "titleAccent": "Anywhere",
     "subtitle": "Turn your business documents into intelligent AI agents. No coding required — train, deploy, and manage in minutes.",
     "cta": "Create Your First Agent",
+    "goToDashboard": "Go to Dashboard",
     "watchDemo": "Watch Demo",
     "stats": {
-      "setupTime": { "val": "5 min", "label": "Agent setup time" },
-      "languages": { "val": "50+", "label": "Languages supported" },
-      "costReduce": { "val": "80%", "label": "Cost reduction" },
-      "available": { "val": "24/7", "label": "Always available" }
+      "setupTime": {
+        "val": "5 min",
+        "label": "Agent setup time"
+      },
+      "languages": {
+        "val": "50+",
+        "label": "Languages supported"
+      },
+      "costReduce": {
+        "val": "80%",
+        "label": "Cost reduction"
+      },
+      "available": {
+        "val": "24/7",
+        "label": "Always available"
+      }
     }
   },
   "features": {
@@ -320,22 +335,127 @@
     "kbDescription": "Answer from your uploaded documents",
     "anDescription": "Analyze data and generate insights"
   },
+
   "settings": {
     "title": "Settings",
-    "subtitle": "Manage your preferences and account settings.",
-    "appearance": "Appearance",
-    "appearanceSubtitle": "Choose how AgentLab looks for you.",
-    "dark": "Dark",
-    "light": "Light",
-    "language": "Language",
-    "languageSubtitle": "Select your preferred language."
+    "subtitle": "Manage your account settings and preferences",
+    "success": {
+      "nameUpdated": "Name updated successfully",
+      "verificationSent": "Verification link sent to new email",
+      "passwordUpdated": "Password updated successfully"
+    },
+    "sections": {
+      "profile": {
+        "title": "Profile",
+        "subtitle": "Update your personal information"
+      },
+      "password": {
+        "title": "Password & Security"
+      }
+    },
+    "profile": {
+      "fullName": "Full Name",
+      "email": "Email Address",
+      "edit": "Edit",
+      "change": "Change",
+      "save": "Save",
+      "cancel": "Cancel",
+      "send": "Send",
+      "verificationNote": "A verification link will be sent to the new email"
+    },
+    "password": {
+      "change": "Change Password",
+      "current": "Current Password",
+      "new": "New Password",
+      "confirm": "Confirm Password",
+      "update": "Update Password",
+      "cancel": "Cancel",
+      "errors": {
+        "mismatch": "Passwords do not match",
+        "tooShort": "Password must be at least 6 characters"
+      }
+    },
+    "appearance": {
+      "title": "Appearance",
+      "dark": "Dark",
+      "light": "Light"
+    },
+    "language": {
+      "title": "Language"
+    },
+    "languages": {
+      "english": {
+        "label": "English",
+        "native": "English"
+      },
+      "arabic": {
+        "label": "Arabic",
+        "native": "العربية"
+      }
+    },
+    "dangerZone": {
+      "title": "Danger Zone",
+      "logout": "Logout",
+      "deleteAccount": "Delete Account"
+    },
+    "delete": {
+      "title": "Delete Account",
+      "warning": {
+        "prefix": "This action is",
+        "permanent": "permanent",
+        "suffix": "and cannot be undone. All your agents, files, and data will be deleted."
+      },
+      "confirmEmail": "Confirm your email",
+      "confirmPassword": "Confirm your password",
+      "cancel": "Cancel",
+      "confirm": "Delete Account",
+      "errors": {
+        "fillAll": "Please fill in all fields",
+        "emailMismatch": "Email doesn't match your account email",
+        "somethingWrong": "Something went wrong"
+      }
+    }
   },
-  "delete": {
-    "title": "Delete Agent",
-    "message": "Are you sure you want to delete",
-    "cannot": "This action cannot be undone.",
-    "confirm": "Delete Agent",
-    "deleting": "Deleting...",
-    "cancel": "Cancel"
+  "admin": {
+    "header": {
+      "title": "Admin Dashboard",
+      "subtitle": "Manage all user accounts",
+      "mockData": "Mock Data"
+    },
+    "stats": {
+      "totalUsers": "Total Users",
+      "totalAgents": "Total Agents",
+      "verifiedUsers": "Verified Users"
+    },
+    "search": {
+      "placeholder": "Search by name or email..."
+    },
+    "table": {
+      "name": "Name",
+      "email": "Email",
+      "agents": "Agents",
+      "verified": "Verified",
+      "role": "Role",
+      "action": "Action",
+      "noUsers": "No users found",
+      "deleteTooltip": "Delete user",
+      "roles": {
+        "admin": "Admin",
+        "user": "User"
+      }
+    },
+    "footer": {
+      "showing": "Showing",
+      "of": "of",
+      "users": "users"
+    },
+    "delete": {
+      "title": "Delete Account",
+      "warning": "This action cannot be undone",
+      "agents": "agent",
+      "willBeDeleted": "will be deleted",
+      "cancel": "Cancel",
+      "confirm": "Delete"
+    }
   }
 }

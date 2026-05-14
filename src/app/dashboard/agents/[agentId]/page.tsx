@@ -111,7 +111,7 @@ export default function AgentPage() {
     <div className="min-h-screen px-4" style={{ background: "var(--black)" }}>
       <div className="mx-auto w-full max-w-4xl flex flex-col gap-6 sm:gap-8">
 
-        {/* ── Header ───────────────────────────────────────────── */}
+        {/*  Header  */}
         <div className="flex items-start justify-between gap-3 flex-wrap">
           <div className="flex items-center gap-3 min-w-0">
             <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border text-base" style={{ borderColor: "var(--border)", background: "var(--surface)", color: "var(--text-1)" }}>
@@ -162,7 +162,7 @@ export default function AgentPage() {
 
       </div>
 
-      {/* ── Delete dialog ─────────────────────────────────────── */}
+      {/* ── Delete dialog  */}
       {showConfirm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div

@@ -4,21 +4,37 @@
     "useCases": "حالات الاستخدام",
     "howItWorks": "كيف يعمل",
     "signIn": "تسجيل الدخول",
-    "getStarted": "ابدأ الآن"
+    "getStarted": "ابدأ الآن",
+    "dashboard": "لوحة التحكم",
+    "goToDashboard": "اذهب للوحة التحكم"
   },
   "hero": {
-    "title1": "أنشئ وكيلك الذكي الخاص وأنشره ",
+    "title1": "أنشئ وكيلك الذكي الخاص وأنشره",
     "title2": " ",
     "titleAccent": "في أي مكان",
-    "subtitle": "حوّل مستندات عملك إلى وكلاء ذكاء اصطناعي متطورين. لا حاجة للبرمجة درّب ونشر وأدر في دقائق.",
+    "subtitle": "حوّل مستندات عملك إلى وكلاء ذكاء اصطناعي متطورين. لا حاجة للبرمجة — درّب ونشر وأدر في دقائق.",
     "cta": "أنشئ وكيلك الأول",
+    "goToDashboard": "اذهب للوحة التحكم",
     "watchDemo": "شاهد العرض",
     "stats": {
-      "setupTime": { "val": "٥ دقائق", "label": "وقت إعداد الوكيل" },
-      "languages": { "val": "+٥٠", "label": "لغة مدعومة" },
-      "costReduce": { "val": "٨٠٪", "label": "تخفيض في التكاليف" },
-      "available": { "val": "٢٤/٧", "label": "متاح دائماً" }
+      "setupTime": {
+        "val": "٥ دقائق",
+        "label": "وقت إعداد الوكيل"
+      },
+      "languages": {
+        "val": "+٥٠",
+        "label": "لغة مدعومة"
+      },
+      "costReduce": {
+        "val": "٨٠٪",
+        "label": "تخفيض في التكاليف"
+      },
+      "available": {
+        "val": "٢٤/٧",
+        "label": "متاح دائماً"
+      }
     }
+  
   },
   "features": {
     "sectionTitle": "الخدامات",
@@ -320,22 +336,128 @@
     "kbDescription": "الإجابة من المستندات المرفوعة",
     "anDescription": "تحليل البيانات وتوليد الرؤى"
   },
+
+
   "settings": {
     "title": "الإعدادات",
-    "subtitle": "إدارة تفضيلاتك وإعدادات حسابك.",
-    "appearance": "المظهر",
-    "appearanceSubtitle": "اختر كيف يبدو AgentLab بالنسبة لك.",
-    "dark": "داكن",
-    "light": "فاتح",
-    "language": "اللغة",
-    "languageSubtitle": "اختر لغتك المفضلة."
+    "subtitle": "إدارة إعدادات حسابك والتفضيلات",
+    "success": {
+      "nameUpdated": "تم تحديث الاسم بنجاح",
+      "verificationSent": "تم إرسال رابط التحقق إلى البريد الجديد",
+      "passwordUpdated": "تم تحديث كلمة المرور بنجاح"
+    },
+    "sections": {
+      "profile": {
+        "title": "الملف الشخصي",
+        "subtitle": "تحديث معلوماتك الشخصية"
+      },
+      "password": {
+        "title": "كلمة المرور والأمان"
+      }
+    },
+    "profile": {
+      "fullName": "الاسم الكامل",
+      "email": "عنوان البريد الإلكتروني",
+      "edit": "تحرير",
+      "change": "تغيير",
+      "save": "حفظ",
+      "cancel": "إلغاء",
+      "send": "إرسال",
+      "verificationNote": "سيتم إرسال رابط التحقق إلى البريد الجديد"
+    },
+    "password": {
+      "change": "تغيير كلمة المرور",
+      "current": "كلمة المرور الحالية",
+      "new": "كلمة المرور الجديدة",
+      "confirm": "تأكيد كلمة المرور",
+      "update": "تحديث كلمة المرور",
+      "cancel": "إلغاء",
+      "errors": {
+        "mismatch": "كلمات المرور غير متطابقة",
+        "tooShort": "يجب أن تكون كلمة المرور 6 أحرف على الأقل"
+      }
+    },
+    "appearance": {
+      "title": "المظهر",
+      "dark": "داكن",
+      "light": "فاتح"
+    },
+    "language": {
+      "title": "اللغة"
+    },
+    "languages": {
+      "english": {
+        "label": "الإنجليزية",
+        "native": "English"
+      },
+      "arabic": {
+        "label": "العربية",
+        "native": "العربية"
+      }
+    },
+    "dangerZone": {
+      "title": "منطقة الخطر",
+      "logout": "تسجيل الخروج",
+      "deleteAccount": "حذف الحساب"
+    },
+    "delete": {
+      "title": "حذف الحساب",
+      "warning": {
+        "prefix": "هذا الإجراء",
+        "permanent": "دائم",
+        "suffix": "ولا يمكن التراجع عنه. سيتم حذف جميع وكلائك وملفاتك وبياناتك."
+      },
+      "confirmEmail": "تأكيد بريدك الإلكتروني",
+      "confirmPassword": "تأكيد كلمة المرور",
+      "cancel": "إلغاء",
+      "confirm": "حذف الحساب",
+      "errors": {
+        "fillAll": "يرجى ملء جميع الحقول",
+        "emailMismatch": "البريد الإلكتروني لا يتطابق مع بريدك الحسابي",
+        "somethingWrong": "حدث خطأ ما"
+      }
+    }
   },
-  "delete": {
-    "title": "حذف الوكيل",
-    "message": "هل أنت متأكد من حذف",
-    "cannot": "لا يمكن التراجع عن هذا الإجراء.",
-    "confirm": "حذف الوكيل",
-    "deleting": "جاري الحذف...",
-    "cancel": "إلغاء"
+  "admin": {
+    "header": {
+      "title": "لوحة تحكم المشرف",
+      "subtitle": "إدارة جميع حسابات المستخدمين",
+      "mockData": "بيانات وهمية"
+    },
+    "stats": {
+      "totalUsers": "إجمالي المستخدمين",
+      "totalAgents": "إجمالي الوكلاء",
+      "verifiedUsers": "المستخدمون المتحققون"
+    },
+    "search": {
+      "placeholder": "البحث بالاسم أو البريد الإلكتروني..."
+    },
+    "table": {
+      "name": "الاسم",
+      "email": "البريد الإلكتروني",
+      "agents": "الوكلاء",
+      "verified": "التحقق",
+      "role": "الدور",
+      "action": "الإجراء",
+      "noUsers": "لم يتم العثور على مستخدمين",
+      "deleteTooltip": "حذف المستخدم",
+      "roles": {
+        "admin": "مشرف",
+        "user": "مستخدم"
+      }
+    },
+    "footer": {
+      "showing": "عرض",
+      "of": "من",
+      "users": "مستخدمين"
+    },
+    "delete": {
+      "title": "حذف الحساب",
+      "warning": "لا يمكن التراجع عن هذا الإجراء",
+      "agents": "وكيل",
+      "willBeDeleted": "سيتم حذفه",
+      "cancel": "إلغاء",
+      "confirm": "حذف"
+    }
   }
 }
