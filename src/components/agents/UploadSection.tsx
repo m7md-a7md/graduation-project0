@@ -56,14 +56,15 @@ export default function UploadSection({ agent, onUpdate }: Props) {
     }
   }
 
-  const handleDelete = async () => {
-    try {
-      await deleteFile(agent.agent_id)
-      onUpdate()
-    } catch {
-      setError("Failed to delete file.")
-    }
+const handleDelete = async () => {
+  if (!agent.file_path) return
+  try {
+    await deleteFile(agent.agent_id, agent.file_path)
+    onUpdate()
+  } catch {
+    setError("Failed to delete file.")
   }
+}
 
   const handleTrain = async () => {
     setTraining(true)
