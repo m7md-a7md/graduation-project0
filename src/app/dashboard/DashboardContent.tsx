@@ -42,10 +42,10 @@ export default function DashboardContent() {
             </svg>
           </div>
           <div className="text-center space-y-3">
-            <h1 className="text-[28px] font-semibold tracking-tight leading-snug" style={{ color: "var(--text-1)" }}>
+            <h1 className="text-[28px] font-semibold tracking-tight leading-snug" style={{ color: "var(--text-1)", fontFamily: "var(--font-display)" }}>
               {t("dashboard", "title")}
             </h1>
-            <p className="text-sm leading-relaxed" style={{ color: "var(--text-3)" }}>
+            <p className="text-sm leading-relaxed" style={{ color: "var(--text-3)", fontFamily: "var(--font-body)" }}>
               {t("dashboard", "subtitle")}
             </p>
           </div>
@@ -60,7 +60,8 @@ export default function DashboardContent() {
             style={{
               background: "rgba(255, 255, 255, 0.08)",
               borderColor: "var(--border)",
-              color: "var(--text-1)"
+              color: "var(--text-1)",
+              fontFamily: "var(--font-body)"
             }}
           >
             <Plus size={15} style={{ color: "var(--text-3)", transition: "color 0.15s" }} className="group-hover:opacity-80" />
@@ -74,7 +75,8 @@ export default function DashboardContent() {
                 style={{
                   borderColor: "var(--border)",
                   background: "rgba(255, 255, 255, 0.04)",
-                  color: "var(--text-3)"
+                  color: "var(--text-3)",
+                  fontFamily: "var(--font-body)"
                 }}
               >
                 {f.label}

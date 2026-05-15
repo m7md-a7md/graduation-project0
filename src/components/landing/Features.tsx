@@ -23,7 +23,6 @@ export default function Features() {
   const headerRef = useReveal();
   const refs = [useReveal(), useReveal(), useReveal(), useReveal()];
 
-  // Read items from JSON
   const items = Array.from({ length: 4 }, (_, i) => ({
     num:   String(i + 1),
     title: t("features", `items.${i}.title`),
@@ -32,7 +31,7 @@ export default function Features() {
   }));
 
   return (
-    <section className="features" id="features">
+    <section className="features" id="features" style={{ fontFamily: "var(--font-body)" }}>
       <div className="container">
         <div className="features-header">
           <div className="reveal" ref={headerRef}>
@@ -44,7 +43,7 @@ export default function Features() {
         <div className="features-grid">
           {items.map((feature, i) => (
             <div key={i} className="feature-card reveal" ref={refs[i]}
-              style={{ transitionDelay: `${i * 0.08}s` }}>
+              style={{ transitionDelay: `${i * 0.08}s`, fontFamily: "var(--font-body)" }}>
               <div className="feature-glow" />
               <span className="feature-num">{feature.num}</span>
               <div className="feature-icon"><FeatureIcon d={feature.icon} /></div>

@@ -80,7 +80,7 @@ const handleDelete = async () => {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       {/* Header */}
       <div className="space-y-2">
         <h3 className="text-base font-semibold tracking-tight" style={{ color: "var(--text-1)" }}>
@@ -146,7 +146,7 @@ const handleDelete = async () => {
               {t("upload", "fileLimit")}
             </p>
             <p className="text-xs mt-1" style={{ color: "var(--text-3)" }}>
-              PDF · Word · Excel · Images · TXT
+              PDF · Word · Excel  · TXT
             </p>
           </div>
         </div>

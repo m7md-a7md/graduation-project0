@@ -77,7 +77,7 @@ function Footer() {
                     ? "rgba(1,71,255,0.12)"
                     : "transparent",
                   color: isActive ? "#0147FF" : "var(--text-3)",
-                  fontFamily: "var(--font-syne)",
+                  fontFamily: "var(--font-body)",
                   fontSize: "12px",
                   fontWeight: 600,
                   cursor: "pointer",

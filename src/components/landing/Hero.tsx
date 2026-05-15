@@ -66,7 +66,7 @@ export default function Hero() {
           <div className="hero-grid" />
           <div className="hero-orb" />
 
-          <h1 className="hero-title" style={{ fontSize: "clamp(2rem, 5vw, 4rem)", lineHeight: "1.1" }}>
+          <h1 className="hero-title" style={{ fontSize: "clamp(2rem, 5vw, 4rem)", lineHeight: "1.1", fontFamily: "var(--font-display)" }}>
             {t("hero", "title1")}<br />
             {t("hero", "title2")} <span className="accent">{t("hero", "titleAccent")}</span>
           </h1>
@@ -87,7 +87,7 @@ export default function Hero() {
           <div className="hero-stats" style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "20px", flexWrap: "wrap" }}>
             {STATS.map((s) => (
               <div className="hero-stat" key={s.label}>
-                <div className="hero-stat-val">{s.val}</div>
+                <div className="hero-stat-val" style={{ fontFamily: "var(--font-display)" }}>{s.val}</div>
                 <div className="hero-stat-label">{s.label}</div>
               </div>
             ))}

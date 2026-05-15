@@ -51,8 +51,8 @@ function WhyAgentLab() {
                 key={i}
                 style={{ transitionDelay: `${i * 0.08}s` }}
               >
-                <div className="why-stat">{w.stat}</div>
-                <div className="why-title">{w.title}</div>
+                <div className="why-stat" style={{ fontFamily: "var(--font-display)" }}>{w.stat}</div>
+                <div className="why-title" style={{ fontFamily: "var(--font-display)" }}>{w.title}</div>
                 <p className="why-body">{w.body}</p>
               </div>
             );

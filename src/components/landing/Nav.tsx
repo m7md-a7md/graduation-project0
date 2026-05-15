@@ -64,13 +64,13 @@ export default function Nav() {
         {/* Desktop Right Actions */}
         <div className="nav-right">
           <ThemeToggle />
-          <Link href={signInHref} className="nav-signin desktop-only">
+          <Link href={signInHref} className="nav-signin desktop-only" style={{ fontFamily: "var(--font-body)" }}>
             {isLoggedIn ? (t("nav", "dashboard") || "Dashboard") : (t("nav", "signIn") || "Sign In")}
           </Link>
           <Link
             href={getStartedHref}
             className="btn-primary desktop-only"
-            style={{ padding: "12px 24px", fontSize: "14px", display: "inline-flex", alignItems: "center", gap: "8px" }}
+            style={{ padding: "12px 24px", fontSize: "14px", display: "inline-flex", alignItems: "center", gap: "8px", fontFamily: "var(--font-body)" }}
           >
             {isLoggedIn ? (t("nav", "goToDashboard") || "Go to Dashboard") : (t("nav", "getStarted") || "Get Started")} <ArrowIcon />
           </Link>
@@ -92,13 +92,13 @@ export default function Nav() {
         <Link href="#how" onClick={closeMobileMenu}>{t("nav", "howItWorks") || "How It Works"}</Link>
 
         <div className="nav-mobile-actions">
-          <Link href={signInHref} className="nav-signin" onClick={closeMobileMenu}>
+          <Link href={signInHref} className="nav-signin" onClick={closeMobileMenu} style={{ fontFamily: "var(--font-body)" }}>
             {isLoggedIn ? (t("nav", "dashboard") || "Dashboard") : (t("nav", "signIn") || "Sign In")}
           </Link>
           <Link
             href={getStartedHref}
             className="btn-primary"
-            style={{ padding: "12px 24px", fontSize: "14px", display: "inline-flex", alignItems: "center", gap: "8px", justifyContent: "center", width: "100%" }}
+            style={{ padding: "12px 24px", fontSize: "14px", display: "inline-flex", alignItems: "center", gap: "8px", justifyContent: "center", width: "100%", fontFamily: "var(--font-body)" }}
             onClick={closeMobileMenu}
           >
             {isLoggedIn ? (t("nav", "goToDashboard") || "Go to Dashboard") : (t("nav", "getStarted") || "Get Started")} <ArrowIcon />

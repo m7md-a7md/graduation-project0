@@ -100,7 +100,7 @@ function SidebarContent({
               <div className="w-[30px] h-[30px] rounded-lg flex items-center justify-center shrink-0" style={{ background: "rgba(1,71,255,0.12)", border: "1px solid rgba(1,71,255,0.2)" }}>
                 <Bot size={14} style={{ color: "#0147FF" }} />
               </div>
-              <span className="text-[15px] tracking-tight" style={{ fontFamily: "'Syne', sans-serif", fontWeight: 700, color: "var(--white)" }}>AgentLab</span>
+              <span className="text-[15px] tracking-tight" style={{ fontFamily: "var(--font-display)", fontWeight: 700, color: "var(--white)" }}>AgentLab</span>
             </Link>
             {isMobile
               ? <button onClick={onClose} className="p-2 rounded-lg text-white/30 hover:text-white hover:bg-white/[0.06] transition-all"><X size={15} /></button>
@@ -115,7 +115,7 @@ function SidebarContent({
         <button
           onClick={() => navigate("/dashboard?newAgent=true")}
           className={cn("w-full flex items-center gap-2 rounded-xl text-[13px] transition-all duration-200 hover:-translate-y-0.5", isCollapsed ? "justify-center p-2.5" : "px-3 py-2.5")}
-          style={{ fontFamily: "'Syne', sans-serif", fontWeight: 700, background: "#0147FF", color: "#fff", border: "1px solid rgba(1,71,255,0.4)" }}
+          style={{ fontFamily: "var(--font-body)", fontWeight: 700, background: "#0147FF", color: "#fff", border: "1px solid rgba(1,71,255,0.4)" }}
           onMouseEnter={e => { e.currentTarget.style.background = "#1a5cff"; e.currentTarget.style.boxShadow = "0 8px 24px rgba(1,71,255,0.35)" }}
           onMouseLeave={e => { e.currentTarget.style.background = "#0147FF"; e.currentTarget.style.boxShadow = "none" }}
         >
@@ -126,7 +126,7 @@ function SidebarContent({
 
       {/* Agents Label */}
       {!isCollapsed && (
-        <p className="shrink-0 text-[11px] font-bold uppercase" style={{ padding: "16px 18px 8px", letterSpacing: "0.1em", color: "var(--text-faint)", fontFamily: "'Syne', sans-serif" }}>
+        <p className="shrink-0 text-[11px] font-bold uppercase" style={{ padding: "16px 18px 8px", letterSpacing: "0.1em", color: "var(--text-faint)", fontFamily: "var(--font-body)" }}>
           {t("sidebar", "agents")} ({agents.length})
         </p>
       )}
@@ -148,8 +148,8 @@ function SidebarContent({
               title={agent.name}
               className={cn("w-full flex items-center gap-2.5 rounded-xl text-left text-[13.5px] group/item transition-colors duration-150", isCollapsed ? "justify-center p-3" : "px-3 py-[9px]")}
               style={isActive
-                ? { background: "rgba(1,71,255,0.12)", color: "#0147FF", border: "1px solid rgba(1,71,255,0.2)", fontFamily: "'Syne', sans-serif", fontWeight: 600 }
-                : { background: "transparent", color: "var(--text-subtle)", border: "1px solid transparent", fontFamily: "'Syne', sans-serif", fontWeight: 500 }
+                ? { background: "rgba(1,71,255,0.12)", color: "#0147FF", border: "1px solid rgba(1,71,255,0.2)", fontFamily: "var(--font-body)", fontWeight: 600 }
+                : { background: "transparent", color: "var(--text-subtle)", border: "1px solid transparent", fontFamily: "var(--font-body)", fontWeight: 500 }
               }
               onMouseEnter={e => { if (!isActive) e.currentTarget.style.background = "rgba(255,255,255,0.04)" }}
               onMouseLeave={e => { if (!isActive) e.currentTarget.style.background = "transparent" }}
@@ -173,7 +173,7 @@ function SidebarContent({
         <div className="shrink-0 px-3 py-3">
           <button
             className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-[13.5px] transition-colors duration-150"
-            style={{ fontFamily: "'Syne', sans-serif", fontWeight: 500, color: "var(--text-subtle)" }}
+            style={{ fontFamily: "var(--font-body)", fontWeight: 500, color: "var(--text-subtle)" }}
             onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,255,255,0.04)"; e.currentTarget.style.color = "var(--white)" }}
             onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "var(--text-subtle)" }}
           >
@@ -196,7 +196,7 @@ function SidebarContent({
           </div>
           {!isCollapsed && (
             <div className="flex-1 text-left min-w-0">
-              <p className="text-[13.5px] truncate" style={{ fontFamily: "'Syne', sans-serif", fontWeight: 600, color: "var(--white)" }}>
+              <p className="text-[13.5px] truncate" style={{ fontFamily: "var(--font-display)", fontWeight: 600, color: "var(--white)" }}>
                 {user?.name || t("sidebar", "account")}
               </p>
               <p className="text-[11px] truncate" style={{ color: "var(--text-faint)" }}>
@@ -214,7 +214,7 @@ function SidebarContent({
             <button
               onClick={() => { setShowAccountMenu(false); router.push("/dashboard/settings") }}
               className="w-full flex items-center gap-2.5 px-4 py-3 text-[13px] transition-colors"
-              style={{ fontFamily: "'Syne', sans-serif", fontWeight: 500, color: "var(--text-subtle)", borderBottom: "1px solid var(--border)" }}
+              style={{ fontFamily: "var(--font-body)", fontWeight: 500, color: "var(--text-subtle)", borderBottom: "1px solid var(--border)" }}
               onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,255,255,0.04)"; e.currentTarget.style.color = "var(--white)" }}
               onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "var(--text-subtle)" }}
             >

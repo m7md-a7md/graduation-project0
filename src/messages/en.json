@@ -335,6 +335,13 @@
     "kbDescription": "Answer from your uploaded documents",
     "anDescription": "Analyze data and generate insights"
   },
+  
+  "delete": {
+    "title": "Delete Agent",
+    "message": "Are you sure you want to delete",
+    "cannot": "? This action cannot be undone.",
+    "cancel": "Cancel"
+  },
 
   "settings": {
     "title": "Settings",
@@ -415,7 +422,9 @@
         "somethingWrong": "Something went wrong"
       }
     }
+    
   },
+
   "admin": {
     "header": {
       "title": "Admin Dashboard",

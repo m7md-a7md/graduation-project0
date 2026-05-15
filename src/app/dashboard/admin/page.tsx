@@ -119,7 +119,7 @@ function StatCard({
         <span style={{ color }}>{icon}</span>
       </div>
       <div>
-        <p className="text-2xl font-bold" style={{ color: "var(--text-1)", fontFamily: "var(--font-syne)" }}>{value}</p>
+        <p className="text-2xl font-bold" style={{ color: "var(--text-1)", fontFamily: "var(--font-plus-jakarta)" }}>{value}</p>
         <p className="text-xs" style={{ color: "var(--text-3)" }}>{label}</p>
       </div>
     </div>
@@ -206,7 +206,7 @@ export default function AdminPage() {
                 <Shield size={18} style={{ color: "#0147FF" }} />
               </div>
               <div style={{ textAlign: isRTL ? "right" : "left" }}>
-                <h1 className="text-lg font-bold" style={{ color: "var(--text-1)", fontFamily: "var(--font-syne)" }}>
+                <h1 className="text-lg font-bold" style={{ color: "var(--text-1)", fontFamily: "var(--font-plus-jakarta)" }}>
                   {t("admin", "header.title") || "Admin Dashboard"}
                 </h1>
                 <p className="text-xs" style={{ color: "var(--text-3)" }}>
@@ -316,7 +316,7 @@ export default function AdminPage() {
                       style={{ background: "rgba(1,71,255,0.1)", color: "#0147FF" }}>
                       {u.name.charAt(0).toUpperCase()}
                     </div>
-                    <span className="text-sm font-medium truncate" style={{ color: "var(--text-1)", fontFamily: "var(--font-syne)" }}>
+                    <span className="text-sm font-medium truncate" style={{ color: "var(--text-1)", fontFamily: "var(--font-plus-jakarta)" }}>
                       {u.name}
                     </span>
                   </div>
