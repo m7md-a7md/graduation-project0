@@ -4,7 +4,7 @@
 // ─────────────────────────────────────────────────────────────
 
 const BASE =
-"https://apinodejssecure-production.up.railway.app/api/v1/auth";
+"/api/v1/auth";
 
 // ── Types ────────────────────────────────────────────────────
 export interface User {

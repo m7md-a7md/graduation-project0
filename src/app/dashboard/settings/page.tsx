@@ -541,9 +541,7 @@ export default function SettingsPage() {
           {/* Danger Zone */}
           <section className="space-y-4">
             <div>
-              <p style={{ fontFamily: "var(--font-syne)", fontSize: "14px", fontWeight: 700, color: "#DC2626", textTransform: "uppercase", letterSpacing: "0.5px" }}>
-                {t("settings", "dangerZone.title") || "Danger Zone"}
-              </p>
+
             </div>
             <div className="space-y-2">
               {/* Logout */}

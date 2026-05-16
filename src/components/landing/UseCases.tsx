@@ -9,22 +9,18 @@ function UseCases() {
   // Get use cases from translations with fallbacks
   const USE_CASES = [
     {
-      num: t("useCases", "items.0.num") || "٠١",
       title: t("useCases", "items.0.title") || "Customer Support Chatbots",
       body: t("useCases", "items.0.body") || "Automate customer inquiries with intelligent chatbots trained on your support documentation.",
     },
     {
-      num: t("useCases", "items.1.num") || "٠٢",
       title: t("useCases", "items.1.title") || "Internal Company Assistants",
       body: t("useCases", "items.1.body") || "Help employees find information quickly with AI assistants trained on internal resources.",
     },
     {
-      num: t("useCases", "items.2.num") || "٠٣",
       title: t("useCases", "items.2.title") || "Knowledge Base Bots",
       body: t("useCases", "items.2.body") || "Transform your documentation into an interactive AI that answers questions instantly.",
     },
     {
-      num: t("useCases", "items.3.num") || "٠٤",
       title: t("useCases", "items.3.title") || "SaaS AI Integrations",
       body: t("useCases", "items.3.body") || "Add intelligent features to your SaaS product with custom-trained AI capabilities.",
     },
@@ -53,7 +49,7 @@ function UseCases() {
               key={i}
               style={{ transitionDelay: `${i * 0.08}s` }}
             >
-              <div className="usecase-num">{u.num}</div>
+            
               <div className="usecase-title">{u.title}</div>
               <p className="usecase-body">{u.body}</p>
             </div>

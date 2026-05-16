@@ -10,11 +10,7 @@
   --font-display: 'Plus Jakarta Sans',sans-serif;
   --font-body: 'Roboto', sans-serif;
   --font-arabic: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
-}
-*{  font-family: var(--font-display);
-    --font-body: 'Roboto', sans-serif;
-
-}  
+};
 
 /* ══════════════════════════════════════
    Base Styles
@@ -63,6 +59,7 @@ html[lang="ar"] * {
 :root {
   /* ── Brand ── */
   --blue:       #0147FF;
+  --blue2:       #224db9; 
   --blue-glow:  rgba(1,71,255,0.25);
   --blue-faint: rgba(1,71,255,0.08);
 
@@ -119,7 +116,7 @@ html[lang="ar"] * {
   /* ─────────────────────────────────────
      Feature number gradient
   ───────────────────────────────────── */
-  --feature-num-gradient: linear-gradient(-120deg, rgba(1,71,255,0.18) 50%, transparent 90%);
+  --feature-num-gradient: linear-gradient(-120deg, rgba(1,71,255,.35) 60%, transparent 90%);
 }
 
 /* ══ LIGHT MODE ══ */
@@ -303,10 +300,11 @@ html.light .footer-copy           { color: #666; }
   border: 1px solid var(--blue-border);
 }
 .section-title {
-  font-size: clamp(32px, 4.5vw, 72px);
+  font-size: clamp(32px, 4.5vw, 52px);
   font-weight: 800;
   line-height: 1.05;
   letter-spacing: -0.5px;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   
 }
 .section-subtitle {
@@ -786,12 +784,12 @@ nav.scrolled {
 }
 
 .feature-num {
-  font-size: 120px;
+  font-size: 160px;
   font-weight: 800;
   line-height: 1;
   position: absolute;
   right: 24px;
-  top: -16px;
+  top: -6px;
   pointer-events: none;
   background: var(--feature-num-gradient);
   -webkit-background-clip: text;
@@ -836,14 +834,14 @@ nav.scrolled {
    USE CASES
 ══════════════════════════════════════ */
 .usecases { 
-  padding: 140px 0; 
+  padding: 10px 0; 
 }
 
 .usecases-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 20px;
-  margin-top: 72px;
+  margin-top: 60px;
 }
 
 .usecase-card {
@@ -891,6 +889,9 @@ nav.scrolled {
   text-transform: uppercase;
   letter-spacing: 0.5px;
   margin-bottom: 12px;
+  color: var(--blue2);
+
+  
 }
 
 .usecase-body {
@@ -903,7 +904,7 @@ nav.scrolled {
    WHY AGENTLAB
 ══════════════════════════════════════ */
 .why { 
-  padding: 120px 0; 
+  padding: 90px 0; 
 }
 
 .why-grid {
@@ -954,7 +955,7 @@ nav.scrolled {
    HOW IT WORKS
 ══════════════════════════════════════ */
 .how { 
-  padding: 120px 0; 
+  padding: 90px 0; 
 }
 
 .steps {
@@ -978,7 +979,7 @@ nav.scrolled {
 }
 
 .step-num {
-  font-size: 11px;
+  font-size: 22px;
   font-weight: 700;
   letter-spacing: 4px;
   text-transform: uppercase;
@@ -1038,6 +1039,7 @@ nav.scrolled {
   margin-right: auto;
   position: relative;
   z-index: 1;
+  font-family: var(--font-syse) ;
 }
 
 .cta-sub {
