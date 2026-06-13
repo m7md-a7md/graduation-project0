@@ -18,25 +18,25 @@ export default function DashboardLayout({
 
   useEffect(() => {
     const init = async () => {
-      // مفيش token خالص → جرب refresh من الـ cookie أولاً
+    
       if (!accessToken) {
         try {
-          await refreshToken()   // بيستخدم الـ refresh_token cookie
+          await refreshToken()   
           await fetchProfile()
           setReady(true)
         } catch {
-          // الـ refresh فشل → روح login
+          
           router.replace("/auth")
         }
         return
       }
 
-      // في token → جرب تجيب الـ profile
+    
       if (!user) {
         try {
           await fetchProfile()
         } catch {
-          // الـ token expired → جرب refresh
+         
           try {
             await refreshToken()
             await fetchProfile()

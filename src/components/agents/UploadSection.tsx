@@ -11,7 +11,7 @@ type Props = {
   onUpdate: () => void
 }
 
-const ALLOWED_EXTENSIONS = [".pdf", ".doc", ".docx", ".xls", ".xlsx", ".txt", ".png", ".jpg", ".jpeg", ".gif", ".webp"]
+const ALLOWED_EXTENSIONS = [".pdf", ".doc", ".docx", ".xls", ".xlsx", ".txt", ".csv", ".png", ".jpg", ".jpeg", ".gif", ".webp"]
 const ALLOWED_MIME_TYPES = [
   "application/pdf",
   "application/msword",
@@ -19,6 +19,8 @@ const ALLOWED_MIME_TYPES = [
   "application/vnd.ms-excel",
   "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
   "text/plain",
+  "text/csv",
+  "application/csv",
   "image/png",
   "image/jpeg",
   "image/gif",
@@ -42,7 +44,7 @@ export default function UploadSection({ agent, onUpdate }: Props) {
   const file = agent.file_name ? { name: agent.file_name, path: agent.file_path } : null
 
   const handleUpload = async (uploadedFile: File) => {
-    if (!isFileAllowed(uploadedFile)) return setError("نوع الملف غير مدعوم. الأنواع المسموح بها: PDF, Word, Excel, صور, نص.")
+    if (!isFileAllowed(uploadedFile)) return setError("نوع الملف غير مدعوم. الأنواع المسموح بها: PDF, Word, Excel, CSV, صور, نص.")
     if (uploadedFile.size > 10 * 1024 * 1024) return setError("File size must be under 10MB")
     setUploading(true)
     setError("")
@@ -56,15 +58,15 @@ export default function UploadSection({ agent, onUpdate }: Props) {
     }
   }
 
-const handleDelete = async () => {
-  if (!agent.file_path) return
-  try {
-    await deleteFile(agent.agent_id, agent.file_path)
-    onUpdate()
-  } catch {
-    setError("Failed to delete file.")
+  const handleDelete = async () => {
+    if (!agent.file_path) return
+    try {
+      await deleteFile(agent.agent_id, agent.file_path)
+      onUpdate()
+    } catch {
+      setError("Failed to delete file.")
+    }
   }
-}
 
   const handleTrain = async () => {
     setTraining(true)
@@ -146,7 +148,7 @@ const handleDelete = async () => {
               {t("upload", "fileLimit")}
             </p>
             <p className="text-xs mt-1" style={{ color: "var(--text-3)" }}>
-              PDF · Word · Excel  · TXT
+              PDF · Word · Excel · CSV · TXT
             </p>
           </div>
         </div>
@@ -154,7 +156,7 @@ const handleDelete = async () => {
         <input
           ref={inputRef}
           type="file"
-          accept=".pdf,.doc,.docx,.xls,.xlsx,.txt,.png,.jpg,.jpeg,.gif,.webp"
+          accept=".pdf,.doc,.docx,.xls,.xlsx,.txt,.csv,.png,.jpg,.jpeg,.gif,.webp"
           className="hidden"
           onChange={(e) => {
             const selected = Array.from(e.target.files || [])
