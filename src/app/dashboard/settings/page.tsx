@@ -44,18 +44,14 @@ function DeleteAccountModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      {/* Backdrop */}
       <div
         className="absolute inset-0 bg-black/70 backdrop-blur-sm"
         onClick={() => !isLoading && onClose()}
       />
-
-      {/* Modal */}
       <div
         className="relative z-10 w-full max-w-sm rounded-2xl border p-6 shadow-2xl"
         style={{ background: "var(--card)", borderColor: "var(--border)" }}
       >
-        {/* Close */}
         <button
           onClick={onClose}
           disabled={isLoading}
@@ -64,8 +60,6 @@ function DeleteAccountModal({
         >
           <X size={16} />
         </button>
-
-        {/* Header */}
         <div className="mb-6">
           <div
             className="w-10 h-10 rounded-xl flex items-center justify-center mb-4"
@@ -82,13 +76,14 @@ function DeleteAccountModal({
             {t("settings", "delete.title") || "Delete Account"}
           </h2>
           <p className="text-xs leading-relaxed" style={{ color: "var(--text-3)" }}>
-            {t("settings", "delete.warning.prefix") || "This action is"} <span style={{ color: "#DC2626", fontWeight: 600 }}>{t("settings", "delete.warning.permanent") || "permanent"}</span> {t("settings", "delete.warning.suffix") || "and cannot be undone. All your agents, files, and data will be deleted."}
+            {t("settings", "delete.warning.prefix") || "This action is"}{" "}
+            <span style={{ color: "#DC2626", fontWeight: 600 }}>
+              {t("settings", "delete.warning.permanent") || "permanent"}
+            </span>{" "}
+            {t("settings", "delete.warning.suffix") || "and cannot be undone. All your agents, files, and data will be deleted."}
           </p>
         </div>
-
-        {/* Fields */}
         <div className="space-y-3 mb-4">
-          {/* Email */}
           <div>
             <label className="block text-xs font-semibold mb-1.5" style={{ color: "var(--text-2)" }}>
               {t("settings", "delete.confirmEmail") || "Confirm your email"}
@@ -101,15 +96,12 @@ function DeleteAccountModal({
               style={{
                 width: "100%", padding: "10px 12px", borderRadius: "10px",
                 border: "1px solid var(--border)", background: "var(--surface)",
-                color: "var(--text-1)", fontSize: "13px", outline: "none",
-                boxSizing: "border-box",
+                color: "var(--text-1)", fontSize: "13px", outline: "none", boxSizing: "border-box",
               }}
-              onFocus={(e) => e.currentTarget.style.borderColor = "rgba(220,38,38,0.4)"}
-              onBlur={(e) => e.currentTarget.style.borderColor = "var(--border)"}
+              onFocus={(e) => (e.currentTarget.style.borderColor = "rgba(220,38,38,0.4)")}
+              onBlur={(e)  => (e.currentTarget.style.borderColor = "var(--border)")}
             />
           </div>
-
-          {/* Password */}
           <div>
             <label className="block text-xs font-semibold mb-1.5" style={{ color: "var(--text-2)" }}>
               {t("settings", "delete.confirmPassword") || "Confirm your password"}
@@ -124,11 +116,10 @@ function DeleteAccountModal({
                 style={{
                   width: "100%", padding: "10px 40px 10px 12px", borderRadius: "10px",
                   border: "1px solid var(--border)", background: "var(--surface)",
-                  color: "var(--text-1)", fontSize: "13px", outline: "none",
-                  boxSizing: "border-box",
+                  color: "var(--text-1)", fontSize: "13px", outline: "none", boxSizing: "border-box",
                 }}
-                onFocus={(e) => e.currentTarget.style.borderColor = "rgba(220,38,38,0.4)"}
-                onBlur={(e) => e.currentTarget.style.borderColor = "var(--border)"}
+                onFocus={(e) => (e.currentTarget.style.borderColor = "rgba(220,38,38,0.4)")}
+                onBlur={(e)  => (e.currentTarget.style.borderColor = "var(--border)")}
               />
               <button
                 onClick={() => setShowPw(!showPw)}
@@ -138,15 +129,9 @@ function DeleteAccountModal({
               </button>
             </div>
           </div>
-
-          {/* Error */}
-          {error && (
-            <p className="text-xs" style={{ color: "#f87171" }}>⚠ {error}</p>
-          )}
+          {error && <p className="text-xs" style={{ color: "#f87171" }}>⚠ {error}</p>}
         </div>
-
-        {/* Buttons */}
-        <div className="flex gap-2" style={{ flexDirection: document.documentElement.dir === "rtl" ? "row-reverse" : "row" }}>
+        <div className="flex gap-2">
           <button
             onClick={onClose}
             disabled={isLoading}
@@ -181,9 +166,9 @@ export default function SettingsPage() {
   const { t, locale, changeLocale, isRTL } = useTranslation()
 
   const {
-    user, isLoading, error,
+    user, isLoading, error: storeError,
     updateName, changePassword, requestEmailChange,
-    logout, deleteAccount, _setError,
+    logout, deleteAccount,
   } = useAuthStore()
 
   const [isEditingProfile, setIsEditingProfile]   = useState(false)
@@ -196,7 +181,10 @@ export default function SettingsPage() {
   const [tempName, setTempName]   = useState("")
   const [tempEmail, setTempEmail] = useState("")
   const [passwordData, setPasswordData] = useState({ current: "", new: "", confirm: "" })
-  const [successMsg, setSuccessMsg] = useState("")
+
+  // ── Local error/success state (replaces _setError) ──────────
+  const [passwordError, setPasswordError] = useState("")
+  const [successMsg, setSuccessMsg]       = useState("")
 
   const showSuccess = (msg: string) => {
     setSuccessMsg(msg)
@@ -209,7 +197,7 @@ export default function SettingsPage() {
   }, [user])
 
   const handleSaveName = async () => {
-    try { 
+    try {
       await updateName(tempName)
       setIsEditingProfile(false)
       showSuccess(t("settings", "success.nameUpdated") || "Name updated successfully")
@@ -217,7 +205,7 @@ export default function SettingsPage() {
   }
 
   const handleSaveEmail = async () => {
-    try { 
+    try {
       await requestEmailChange(tempEmail)
       setIsEditingEmail(false)
       showSuccess(t("settings", "success.verificationSent") || "Verification link sent to new email")
@@ -225,21 +213,26 @@ export default function SettingsPage() {
   }
 
   const handleSavePassword = async () => {
-    _setError(null)
-    if (passwordData.new !== passwordData.confirm) { 
-      _setError(t("settings", "password.errors.mismatch") || "Passwords do not match")
-      return 
+    // Validate locally — no need to touch the store
+    setPasswordError("")
+    if (passwordData.new !== passwordData.confirm) {
+      setPasswordError(t("settings", "password.errors.mismatch") || "Passwords do not match")
+      return
     }
-    if (passwordData.new.length < 6) { 
-      _setError(t("settings", "password.errors.tooShort") || "Password must be at least 6 characters")
-      return 
+    if (passwordData.new.length < 6) {
+      setPasswordError(t("settings", "password.errors.tooShort") || "Password must be at least 6 characters")
+      return
     }
     try {
       await changePassword(passwordData.current, passwordData.new)
       setPasswordData({ current: "", new: "", confirm: "" })
       setIsEditingPassword(false)
+      setPasswordError("")
       showSuccess(t("settings", "success.passwordUpdated") || "Password updated successfully")
-    } catch {}
+    } catch (e: unknown) {
+      // Show server error (e.g. "Wrong current password") inline
+      setPasswordError(e instanceof Error ? e.message : "Failed to update password")
+    }
   }
 
   const handleLogout = async () => {
@@ -254,14 +247,13 @@ export default function SettingsPage() {
 
   const LANGUAGES = [
     { code: "en", label: t("settings", "languages.english.label") || "English", native: t("settings", "languages.english.native") || "English" },
-    { code: "ar", label: t("settings", "languages.arabic.label") || "Arabic", native: t("settings", "languages.arabic.native") || "العربية" },
+    { code: "ar", label: t("settings", "languages.arabic.label") || "Arabic",  native: t("settings", "languages.arabic.native")  || "العربية" },
   ]
 
   if (!mounted) return null
 
   return (
     <>
-      {/* Delete Modal */}
       {showDeleteModal && (
         <DeleteAccountModal
           onClose={() => setShowDeleteModal(false)}
@@ -284,18 +276,21 @@ export default function SettingsPage() {
             </p>
           </div>
 
-          {error && (
+          {/* Store-level error (network / server errors) */}
+          {storeError && (
             <div style={{ padding: "12px 16px", borderRadius: "10px", background: "rgba(239,68,68,0.1)", border: "1px solid rgba(239,68,68,0.3)", color: "#f87171", fontSize: "13px" }}>
-              ⚠ {error}
+              ⚠ {storeError}
             </div>
           )}
+
+          {/* Success toast */}
           {successMsg && (
             <div style={{ padding: "12px 16px", borderRadius: "10px", background: "rgba(34,197,94,0.1)", border: "1px solid rgba(34,197,94,0.25)", color: "#22c55e", fontSize: "13px" }}>
               ✓ {successMsg}
             </div>
           )}
 
-          {/* Profile */}
+          {/* ── Profile ─────────────────────────────────────────── */}
           <section className="space-y-4">
             <div>
               <p style={{ fontFamily: "var(--font-syne)", fontSize: "14px", fontWeight: 700, color: "var(--text-1)", textTransform: "uppercase", letterSpacing: "0.5px" }}>
@@ -320,22 +315,18 @@ export default function SettingsPage() {
                 </div>
                 {isEditingProfile ? (
                   <div style={{ display: "flex", gap: "8px", flexDirection: isRTL ? "row-reverse" : "row" }}>
-                    <input 
-                      type="text" 
-                      value={tempName} 
-                      onChange={(e) => setTempName(e.target.value)} 
-                      onKeyDown={(e) => e.key === "Enter" && handleSaveName()} 
-                      style={{ flex: 1, padding: "10px 12px", borderRadius: "10px", border: "1px solid var(--border)", background: "var(--surface)", color: "var(--text-1)", fontSize: "14px", outline: "none" }} 
+                    <input
+                      type="text" value={tempName}
+                      onChange={(e) => setTempName(e.target.value)}
+                      onKeyDown={(e) => e.key === "Enter" && handleSaveName()}
+                      style={{ flex: 1, padding: "10px 12px", borderRadius: "10px", border: "1px solid var(--border)", background: "var(--surface)", color: "var(--text-1)", fontSize: "14px", outline: "none" }}
                     />
-                    <button 
-                      onClick={handleSaveName} 
-                      disabled={isLoading} 
+                    <button onClick={handleSaveName} disabled={isLoading}
                       style={{ padding: "8px 16px", borderRadius: "8px", background: "#0147FF", color: "#fff", fontSize: "12px", fontWeight: 600, border: "none", cursor: "pointer", display: "flex", alignItems: "center", gap: "6px" }}>
-                      {isLoading ? <Loader2 size={12} className="animate-spin" /> : null} 
+                      {isLoading && <Loader2 size={12} className="animate-spin" />}
                       {t("settings", "profile.save") || "Save"}
                     </button>
-                    <button 
-                      onClick={() => { setIsEditingProfile(false); setTempName(user?.name ?? "") }} 
+                    <button onClick={() => { setIsEditingProfile(false); setTempName(user?.name ?? "") }}
                       style={{ padding: "8px 12px", borderRadius: "8px", background: "var(--surface)", color: "var(--text-3)", fontSize: "12px", border: "1px solid var(--border)", cursor: "pointer" }}>
                       {t("settings", "profile.cancel") || "Cancel"}
                     </button>
@@ -344,6 +335,7 @@ export default function SettingsPage() {
                   <p style={{ fontFamily: "var(--font-arabic)", fontSize: "14px", color: "var(--text-1)" }}>{user?.name || "—"}</p>
                 )}
               </div>
+
               {/* Email */}
               <div>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px", flexDirection: isRTL ? "row-reverse" : "row" }}>
@@ -359,21 +351,17 @@ export default function SettingsPage() {
                 {isEditingEmail ? (
                   <div>
                     <div style={{ display: "flex", gap: "8px", marginBottom: "8px", flexDirection: isRTL ? "row-reverse" : "row" }}>
-                      <input 
-                        type="email" 
-                        value={tempEmail} 
-                        onChange={(e) => setTempEmail(e.target.value)} 
-                        style={{ flex: 1, padding: "10px 12px", borderRadius: "10px", border: "1px solid var(--border)", background: "var(--surface)", color: "var(--text-1)", fontSize: "14px", outline: "none" }} 
+                      <input
+                        type="email" value={tempEmail}
+                        onChange={(e) => setTempEmail(e.target.value)}
+                        style={{ flex: 1, padding: "10px 12px", borderRadius: "10px", border: "1px solid var(--border)", background: "var(--surface)", color: "var(--text-1)", fontSize: "14px", outline: "none" }}
                       />
-                      <button 
-                        onClick={handleSaveEmail} 
-                        disabled={isLoading} 
+                      <button onClick={handleSaveEmail} disabled={isLoading}
                         style={{ padding: "8px 16px", borderRadius: "8px", background: "#0147FF", color: "#fff", fontSize: "12px", fontWeight: 600, border: "none", cursor: "pointer", display: "flex", alignItems: "center", gap: "6px" }}>
-                        {isLoading ? <Loader2 size={12} className="animate-spin" /> : null} 
+                        {isLoading && <Loader2 size={12} className="animate-spin" />}
                         {t("settings", "profile.send") || "Send"}
                       </button>
-                      <button 
-                        onClick={() => { setIsEditingEmail(false); setTempEmail(user?.email ?? "") }} 
+                      <button onClick={() => { setIsEditingEmail(false); setTempEmail(user?.email ?? "") }}
                         style={{ padding: "8px 12px", borderRadius: "8px", background: "var(--surface)", color: "var(--text-3)", fontSize: "12px", border: "1px solid var(--border)", cursor: "pointer" }}>
                         {t("settings", "profile.cancel") || "Cancel"}
                       </button>
@@ -391,7 +379,7 @@ export default function SettingsPage() {
 
           <div style={{ height: "1px", background: "var(--border)" }} />
 
-          {/* Password */}
+          {/* ── Password ─────────────────────────────────────────── */}
           <section className="space-y-4">
             <div>
               <p style={{ fontFamily: "var(--font-syne)", fontSize: "14px", fontWeight: 700, color: "var(--text-1)", textTransform: "uppercase", letterSpacing: "0.5px" }}>
@@ -400,8 +388,8 @@ export default function SettingsPage() {
             </div>
             <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: "16px", padding: "24px" }}>
               {!isEditingPassword ? (
-                <button 
-                  onClick={() => setIsEditingPassword(true)} 
+                <button
+                  onClick={() => setIsEditingPassword(true)}
                   style={{ width: "100%", padding: "14px 16px", borderRadius: "10px", border: "1px solid var(--border)", background: "var(--surface)", color: "var(--text-1)", fontFamily: "var(--font-syne)", fontSize: "13px", fontWeight: 600, cursor: "pointer" }}>
                   {t("settings", "password.change") || "Change Password"}
                 </button>
@@ -412,14 +400,13 @@ export default function SettingsPage() {
                       {t("settings", "password.current") || "Current Password"}
                     </label>
                     <div style={{ position: "relative" }}>
-                      <input 
-                        type={showPassword ? "text" : "password"} 
-                        value={passwordData.current} 
-                        onChange={(e) => setPasswordData({ ...passwordData, current: e.target.value })} 
-                        style={{ width: "100%", padding: "10px 40px 10px 12px", borderRadius: "10px", border: "1px solid var(--border)", background: "var(--surface)", color: "var(--text-1)", fontSize: "14px", outline: "none", boxSizing: "border-box" }} 
+                      <input
+                        type={showPassword ? "text" : "password"}
+                        value={passwordData.current}
+                        onChange={(e) => setPasswordData({ ...passwordData, current: e.target.value })}
+                        style={{ width: "100%", padding: "10px 40px 10px 12px", borderRadius: "10px", border: "1px solid var(--border)", background: "var(--surface)", color: "var(--text-1)", fontSize: "14px", outline: "none", boxSizing: "border-box" }}
                       />
-                      <button 
-                        onClick={() => setShowPassword(!showPassword)} 
+                      <button onClick={() => setShowPassword(!showPassword)}
                         style={{ position: "absolute", right: "10px", top: "50%", transform: "translateY(-50%)", background: "none", border: "none", cursor: "pointer", color: "var(--text-3)" }}>
                         {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                       </button>
@@ -430,14 +417,13 @@ export default function SettingsPage() {
                       {t("settings", "password.new") || "New Password"}
                     </label>
                     <div style={{ position: "relative" }}>
-                      <input 
-                        type={showNewPassword ? "text" : "password"} 
-                        value={passwordData.new} 
-                        onChange={(e) => setPasswordData({ ...passwordData, new: e.target.value })} 
-                        style={{ width: "100%", padding: "10px 40px 10px 12px", borderRadius: "10px", border: "1px solid var(--border)", background: "var(--surface)", color: "var(--text-1)", fontSize: "14px", outline: "none", boxSizing: "border-box" }} 
+                      <input
+                        type={showNewPassword ? "text" : "password"}
+                        value={passwordData.new}
+                        onChange={(e) => setPasswordData({ ...passwordData, new: e.target.value })}
+                        style={{ width: "100%", padding: "10px 40px 10px 12px", borderRadius: "10px", border: "1px solid var(--border)", background: "var(--surface)", color: "var(--text-1)", fontSize: "14px", outline: "none", boxSizing: "border-box" }}
                       />
-                      <button 
-                        onClick={() => setShowNewPassword(!showNewPassword)} 
+                      <button onClick={() => setShowNewPassword(!showNewPassword)}
                         style={{ position: "absolute", right: "10px", top: "50%", transform: "translateY(-50%)", background: "none", border: "none", cursor: "pointer", color: "var(--text-3)" }}>
                         {showNewPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                       </button>
@@ -447,24 +433,30 @@ export default function SettingsPage() {
                     <label style={{ fontFamily: "var(--font-syne)", fontSize: "13px", fontWeight: 600, color: "var(--text-2)", display: "block", marginBottom: "8px" }}>
                       {t("settings", "password.confirm") || "Confirm Password"}
                     </label>
-                    <input 
-                      type="password" 
-                      value={passwordData.confirm} 
-                      onChange={(e) => setPasswordData({ ...passwordData, confirm: e.target.value })} 
-                      onKeyDown={(e) => e.key === "Enter" && handleSavePassword()} 
-                      style={{ width: "100%", padding: "10px 12px", borderRadius: "10px", border: "1px solid var(--border)", background: "var(--surface)", color: "var(--text-1)", fontSize: "14px", outline: "none", boxSizing: "border-box" }} 
+                    <input
+                      type="password"
+                      value={passwordData.confirm}
+                      onChange={(e) => setPasswordData({ ...passwordData, confirm: e.target.value })}
+                      onKeyDown={(e) => e.key === "Enter" && handleSavePassword()}
+                      style={{ width: "100%", padding: "10px 12px", borderRadius: "10px", border: "1px solid var(--border)", background: "var(--surface)", color: "var(--text-1)", fontSize: "14px", outline: "none", boxSizing: "border-box" }}
                     />
                   </div>
+
+                  {/* Password-specific error (local state, not store) */}
+                  {passwordError && (
+                    <p style={{ fontSize: "12px", color: "#f87171", padding: "8px 12px", borderRadius: "8px", background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.2)" }}>
+                      ⚠ {passwordError}
+                    </p>
+                  )}
+
                   <div style={{ display: "flex", gap: "10px", flexDirection: isRTL ? "row-reverse" : "row" }}>
-                    <button 
-                      onClick={handleSavePassword} 
-                      disabled={isLoading} 
+                    <button onClick={handleSavePassword} disabled={isLoading}
                       style={{ flex: 1, padding: "12px 16px", borderRadius: "10px", background: "#0147FF", color: "#fff", fontFamily: "var(--font-syne)", fontSize: "13px", fontWeight: 600, border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: "6px" }}>
-                      {isLoading && <Loader2 size={14} className="animate-spin" />} 
+                      {isLoading && <Loader2 size={14} className="animate-spin" />}
                       {t("settings", "password.update") || "Update Password"}
                     </button>
-                    <button 
-                      onClick={() => { setIsEditingPassword(false); setPasswordData({ current: "", new: "", confirm: "" }) }} 
+                    <button
+                      onClick={() => { setIsEditingPassword(false); setPasswordData({ current: "", new: "", confirm: "" }); setPasswordError("") }}
                       style={{ flex: 1, padding: "12px 16px", borderRadius: "10px", background: "var(--surface)", color: "var(--text-1)", fontFamily: "var(--font-syne)", fontSize: "13px", fontWeight: 600, border: "1px solid var(--border)", cursor: "pointer" }}>
                       {t("settings", "password.cancel") || "Cancel"}
                     </button>
@@ -476,7 +468,7 @@ export default function SettingsPage() {
 
           <div style={{ height: "1px", background: "var(--border)" }} />
 
-          {/* Appearance */}
+          {/* ── Appearance ───────────────────────────────────────── */}
           <section className="space-y-4">
             <div>
               <p style={{ fontFamily: "var(--font-syne)", fontSize: "14px", fontWeight: 700, color: "var(--text-1)", textTransform: "uppercase", letterSpacing: "0.5px" }}>
@@ -485,14 +477,12 @@ export default function SettingsPage() {
             </div>
             <div className="grid grid-cols-2 gap-3">
               {[
-                { value: "dark", label: t("settings", "appearance.dark") || "Dark", icon: <Moon size={16} /> }, 
-                { value: "light", label: t("settings", "appearance.light") || "Light", icon: <Sun size={16} /> }
+                { value: "dark",  label: t("settings", "appearance.dark")  || "Dark",  icon: <Moon size={16} /> },
+                { value: "light", label: t("settings", "appearance.light") || "Light", icon: <Sun  size={16} /> },
               ].map((opt) => {
                 const isActive = theme === opt.value
                 return (
-                  <button 
-                    key={opt.value} 
-                    onClick={() => setTheme(opt.value)} 
+                  <button key={opt.value} onClick={() => setTheme(opt.value)}
                     style={{ background: isActive ? "rgba(1,71,255,0.08)" : "var(--card)", border: `1px solid ${isActive ? "rgba(1,71,255,0.3)" : "var(--border)"}`, borderRadius: "14px", padding: "16px 20px", display: "flex", alignItems: "center", justifyContent: "space-between", cursor: "pointer" }}>
                     <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                       <div style={{ width: "32px", height: "32px", borderRadius: "10px", background: isActive ? "rgba(1,71,255,0.15)" : "var(--surface)", border: `1px solid ${isActive ? "rgba(1,71,255,0.25)" : "var(--border)"}`, display: "flex", alignItems: "center", justifyContent: "center", color: isActive ? "#0147FF" : "var(--text-3)" }}>{opt.icon}</div>
@@ -507,7 +497,7 @@ export default function SettingsPage() {
 
           <div style={{ height: "1px", background: "var(--border)" }} />
 
-          {/* Language */}
+          {/* ── Language ─────────────────────────────────────────── */}
           <section className="space-y-4">
             <div>
               <p style={{ fontFamily: "var(--font-syne)", fontSize: "14px", fontWeight: 700, color: "var(--text-1)", textTransform: "uppercase", letterSpacing: "0.5px" }}>
@@ -518,9 +508,7 @@ export default function SettingsPage() {
               {LANGUAGES.map((lang) => {
                 const isActive = locale === lang.code
                 return (
-                  <button 
-                    key={lang.code} 
-                    onClick={() => changeLocale(lang.code as "en" | "ar")} 
+                  <button key={lang.code} onClick={() => changeLocale(lang.code as "en" | "ar")}
                     style={{ width: "100%", background: isActive ? "rgba(1,71,255,0.08)" : "var(--card)", border: `1px solid ${isActive ? "rgba(1,71,255,0.3)" : "var(--border)"}`, borderRadius: "14px", padding: "14px 20px", display: "flex", alignItems: "center", justifyContent: "space-between", cursor: "pointer", flexDirection: isRTL ? "row-reverse" : "row" }}>
                     <div style={{ display: "flex", alignItems: "center", gap: "12px", flexDirection: isRTL ? "row-reverse" : "row" }}>
                       <div style={{ width: "32px", height: "32px", borderRadius: "10px", background: isActive ? "rgba(1,71,255,0.15)" : "var(--surface)", border: `1px solid ${isActive ? "rgba(1,71,255,0.25)" : "var(--border)"}`, display: "flex", alignItems: "center", justifyContent: "center", color: isActive ? "#0147FF" : "var(--text-3)" }}><Globe size={14} /></div>
@@ -538,16 +526,10 @@ export default function SettingsPage() {
 
           <div style={{ height: "1px", background: "var(--border)" }} />
 
-          {/* Danger Zone */}
+          {/* ── Danger Zone ──────────────────────────────────────── */}
           <section className="space-y-4">
-            <div>
-
-            </div>
             <div className="space-y-2">
-              {/* Logout */}
-              <button 
-                onClick={handleLogout} 
-                disabled={isLoading} 
+              <button onClick={handleLogout} disabled={isLoading}
                 style={{ width: "100%", display: "flex", alignItems: "center", gap: "12px", padding: "14px 20px", borderRadius: "14px", border: "1px solid var(--border)", background: "var(--surface)", color: "var(--text-1)", fontFamily: "var(--font-syne)", fontSize: "13px", fontWeight: 600, cursor: "pointer", flexDirection: isRTL ? "row-reverse" : "row" }}>
                 {isLoading ? <Loader2 size={16} className="animate-spin" /> : (
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
@@ -555,12 +537,8 @@ export default function SettingsPage() {
                 <span>{t("settings", "dangerZone.logout") || "Logout"}</span>
               </button>
 
-              {/* Delete Account */}
-              <button
-                onClick={() => setShowDeleteModal(true)}
-                disabled={isLoading}
-                style={{ width: "100%", display: "flex", alignItems: "center", gap: "12px", padding: "14px 20px", borderRadius: "14px", border: "1px solid #DC2626", background: "rgba(220,38,38,0.08)", color: "#DC2626", fontFamily: "var(--font-syne)", fontSize: "13px", fontWeight: 600, cursor: "pointer", flexDirection: isRTL ? "row-reverse" : "row" }}
-              >
+              <button onClick={() => setShowDeleteModal(true)} disabled={isLoading}
+                style={{ width: "100%", display: "flex", alignItems: "center", gap: "12px", padding: "14px 20px", borderRadius: "14px", border: "1px solid #DC2626", background: "rgba(220,38,38,0.08)", color: "#DC2626", fontFamily: "var(--font-syne)", fontSize: "13px", fontWeight: 600, cursor: "pointer", flexDirection: isRTL ? "row-reverse" : "row" }}>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
                 <span>{t("settings", "dangerZone.deleteAccount") || "Delete Account"}</span>
               </button>
