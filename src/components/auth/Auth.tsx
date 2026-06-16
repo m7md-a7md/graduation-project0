@@ -5,10 +5,11 @@ import { useSearchParams, useRouter } from "next/navigation";
 import LoginForm from "@/components/auth/LoginForm";
 import RegisterForm from "@/components/auth/RegisterForm";
 import ResetPasswordForm from "@/components/auth/ResetPasswordForm";
+import SetNewPasswordForm from "@/components/auth/SetNewPasswordForm";
 import Link from "next/link";
 import { useTranslation } from "@/hooks/useTranslation";
 
-type AuthMode = "login" | "register" | "reset";
+type AuthMode = "login" | "register" | "reset" | "set-password";
 
 // ─── Grid background ────────────────────────────────────────────────────────
 const GridBg = () => (
@@ -43,6 +44,10 @@ const BrandPanel = ({ mode, compact, t }: { mode: AuthMode; compact?: boolean; t
       title: t("auth", "taglines.reset.title") || "No worries.",
       sub: t("auth", "taglines.reset.sub") || "We'll send a reset link to your inbox. You'll be back in seconds."
     },
+    "set-password": {
+      title: t("auth", "taglines.set-password.title") || "Set your new password.",
+      sub: t("auth", "taglines.set-password.sub") || "Your new password must be at least 8 characters long and include a mix of letters and numbers."
+    }
   };
 
   const { title, sub } = taglines[mode];
@@ -412,6 +417,9 @@ export default function AuthLayout() {
               )}
               {mode === "reset" && (
                 <ResetPasswordForm onBackToLogin={() => switchMode("login")} />
+              )}
+              {mode === "set-password" && (
+                <SetNewPasswordForm onBackToLogin={() => switchMode("login")} />
               )}
             </div>
           </div>
