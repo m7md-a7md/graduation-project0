@@ -1,11 +1,44 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, type ReactNode } from "react"
 import { getWidget, createWidget, type Widget } from "@/lib/api"
 import { Copy, Check, Zap, Loader2 } from "lucide-react"
 import { useTranslation } from "@/hooks/useTranslation"
 
 type FullWidget = Widget & { publicKey?: string; embed_code?: string }
+
+/* Small helper so the two numbered/icon circles don't repeat full style blocks */
+function StepBadge({
+  children,
+  size = 18,
+  variant = "outline",
+}: {
+  children: ReactNode
+  size?: number
+  variant?: "filled" | "outline"
+}) {
+  return (
+    <span
+      style={{
+        width: `${size}px`,
+        height: `${size}px`,
+        borderRadius: "50%",
+        background: variant === "filled" ? "rgba(1,71,255,0.15)" : "rgba(1,71,255,0.08)",
+        border: `1px solid rgba(1,71,255,${variant === "filled" ? 0.25 : 0.15})`,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        flexShrink: 0,
+        fontFamily: "var(--font-syne)",
+        fontSize: variant === "filled" ? "10px" : "9px",
+        fontWeight: 800,
+        color: "#0147FF",
+      }}
+    >
+      {children}
+    </span>
+  )
+}
 
 export default function WidgetTab({ agentId }: { agentId: string }) {
   const [widget, setWidget]     = useState<FullWidget | null>(null)
@@ -13,6 +46,24 @@ export default function WidgetTab({ agentId }: { agentId: string }) {
   const [creating, setCreating] = useState(false)
   const [copied, setCopied]     = useState<"code" | "key" | null>(null)
   const { t } = useTranslation()
+
+  const HOW_TO_USE_STEPS = [
+    {
+      step: "1",
+      title: t("widget", "step1Title"),
+      desc: t("widget", "step1Desc"),
+    },
+    {
+      step: "2",
+      title: t("widget", "step2Title"),
+      desc: t("widget", "step2Desc"),
+    },
+    {
+      step: "3",
+      title: t("widget", "step3Title"),
+      desc: t("widget", "step3Desc"),
+    },
+  ]
 
   useEffect(() => {
     getWidget(agentId).then((data) => {
@@ -111,6 +162,40 @@ export default function WidgetTab({ agentId }: { agentId: string }) {
             <button onClick={() => handleCopy("key")} style={{ position: "absolute", top: "8px", right: "8px", background: "var(--input-bg)", border: "1px solid var(--border)", borderRadius: "6px", padding: "4px 6px", cursor: "pointer", color: copied === "key" ? "#22c55e" : "var(--text-3)" }}>
               {copied === "key" ? <Check size={11} /> : <Copy size={11} />}
             </button>
+          </div>
+        </div>
+      )}
+
+      {/* How to use */}
+      {embedCode && (
+        <div style={{
+          background: "rgba(1,71,255,0.04)",
+          border: "1px solid rgba(1,71,255,0.12)",
+          borderRadius: "12px",
+          padding: "14px 16px",
+          marginTop: "4px",
+        }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "10px" }}>
+            <StepBadge variant="filled">i</StepBadge>
+            <p style={{ fontFamily: "var(--font-syne)", fontSize: "11px", fontWeight: 700, color: "#0147FF", letterSpacing: "0.5px" }}>
+            {t("widget", "howToUse")}            </p>
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+            {HOW_TO_USE_STEPS.map((item) => (
+              <div key={item.step} style={{ display: "flex", alignItems: "flex-start", gap: "10px" }}>
+                <span style={{ marginTop: "1px" }}>
+                  <StepBadge>{item.step}</StepBadge>
+                </span>
+                <p style={{
+                  fontFamily: "var(--font-dm-sans)",
+                  fontSize: "11px",
+                  color: "var(--text-3)",
+                  lineHeight: 1.5,
+                }}>
+                  {item.desc}
+                </p>
+              </div>
+            ))}
           </div>
         </div>
       )}

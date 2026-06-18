@@ -313,7 +313,16 @@
     "inactive": "Widget Inactive",
     "embedCode": "Embed Code",
     "publicKey": "Public Key",
-    "copied": "Copied!"
+    "copied": "Copied!",
+    "howToUse": "How to add to your website",
+"step1Title": "Copy the embed code",
+"step1Desc": "Click the copy button next to the embed code at the top of this panel.",
+"step2Title": "Open your website's HTML file",
+"step2Desc": "Find the file that contains your website's HTML code — usually called index.html. Paste the code just before the </body> closing tag.",
+"step3Title": "That's it! 🎉",
+"step3Desc": "Save the file and open your website. You'll see a chat button appear in the bottom-right corner of every page.",
+"warningKey": "Never share your public key with anyone. It gives access to your agent."
+    
   },
   "test": {
     "startConversation": "Start a conversation with your agent",
